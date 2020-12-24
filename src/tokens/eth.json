@@ -1,0 +1,10 @@
+{
+    "title": "Binance-Peg Ethereum Token",
+    "code": "ETH",
+    "icon": "eth.webp",
+    "decimals": 18,
+    "contract": {
+        "mainnet": "0x2170ed0880ac9a755fd29b2688956bd959f933f8",
+        "testnet": null
+    }
+}
