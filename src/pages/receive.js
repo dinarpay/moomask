@@ -3,7 +3,7 @@ import React from 'react'
 import {  Container, Typography, Box } from '@material-ui/core'
 import BackButtonHeader from '../components/back-button-header'
 
-import { makeStyles, useTheme } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 
 import Header from '../components/header'
 import { useRecoilValue } from 'recoil';

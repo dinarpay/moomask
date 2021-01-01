@@ -1,9 +1,7 @@
 import React from 'react';
 
-import {currentNetwork, networkTransactions} from '../store/atoms'
-import { useRecoilState, useRecoilValue } from 'recoil';
-
-import { refreshCalled, currentWallet } from '../store/atoms';
+import { networkTransactions } from '../store/atoms'
+import {  useRecoilValue } from 'recoil';
 
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';

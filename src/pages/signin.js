@@ -1,7 +1,7 @@
 import React from 'react';
-import { NavLink, useHistory } from 'react-router-dom'
+import { useHistory } from 'react-router-dom'
 
-import {Button, Box, TextField, Container} from '@material-ui/core';
+import {Button, Box, TextField} from '@material-ui/core';
 
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Header from '../components/header';

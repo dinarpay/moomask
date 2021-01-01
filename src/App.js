@@ -1,7 +1,6 @@
 import React from 'react';
 
 import './App.css';
-import Header from './components/header'
 import CreateWallet from './pages/create-wallet'
 import ImportWallet from './pages/import-wallet'
 import Signin from './pages/signin'
@@ -20,8 +19,6 @@ import {
 } from "react-router-dom";
 
 import { ThemeProvider, createMuiTheme } from '@material-ui/core/styles';
-
-import ConnectionProvider from './providers/connection-context';
 
 
 const theme = createMuiTheme({
@@ -60,7 +57,6 @@ function App() {
 
   return (
     <ThemeProvider theme={theme}>
-      <ConnectionProvider>
         <Router>
             <Switch>
               <Route path="/create-wallet">
@@ -86,7 +82,6 @@ function App() {
               </Route>
             </Switch>
         </Router>
-      </ConnectionProvider>
     </ThemeProvider>
     
   );

@@ -1,5 +1,5 @@
 import React from 'react';
-import AppBar from '@material-ui/core/AppBar';
+
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Button from '@material-ui/core/Button';
@@ -10,10 +10,8 @@ import Header from '../components/header';
 import Balance from '../components/balance';
 import CardActions from '@material-ui/core/CardActions';
 
-
 import Transactions from '../components/transactions';
 import { useHistory } from 'react-router-dom';
-
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;

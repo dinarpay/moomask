@@ -4,7 +4,6 @@ import { makeStyles } from '@material-ui/core/styles';
 import Options from './options';
 import NetworkSelector from './network-selector'
 
-import Box from '@material-ui/core/Box';
 import { AppBar, Toolbar } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 

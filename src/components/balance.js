@@ -1,14 +1,13 @@
 import { Card, CardContent, Typography, CardActionArea } from '@material-ui/core'
 import React from 'react'
 
-import { makeStyles, useTheme } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 
-import {currentNetwork} from '../store/atoms'
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilValue } from 'recoil';
 
-import { ConnectionContext } from '../providers/connection-context';
 
-import { refreshCalled, currentWallet } from '../store/atoms';
+import { currentWallet, currentBalanceFormatted } from '../store/atoms';
+
 
 const useStyles = makeStyles(() => ({
   longText: {
@@ -20,30 +19,18 @@ const useStyles = makeStyles(() => ({
 export default function Balance({children}) {
   const classes = useStyles( );
 
-  const [refreshVal] = useRecoilState(refreshCalled);
-  const [wallet, setWallet] = useRecoilState(currentWallet);
+  const precision = 18;
+  const defaultToken = 'bnb';
 
-  const selNetwork = useRecoilValue(currentNetwork);
-
-  const {web3} = React.useContext(ConnectionContext);
-
-  const formatBal = (amount) => {
-    const precision = 18;
-    return amount / Math.pow(10, precision)
-  }
-
-  React.useEffect( async () => {
-    const bal = await web3.eth.getBalance(wallet.address)
-    const wal = {...wallet, balance: bal, formatted: formatBal(bal)  };
-    setWallet(wal);
-  }, [selNetwork, refreshVal]);
-
+  const wallet = useRecoilValue(currentWallet);
+  const balance = useRecoilValue(currentBalanceFormatted({token: defaultToken, precision}));
+  
   return (
     <Card>
       <CardActionArea>
         <CardContent>
           <Typography variant="caption" >ACCOUNT BALANCE</Typography>
-          <Typography variant="h3" color="primary">{wallet.formatted}</Typography>
+          <Typography variant="h3" color="primary">{balance}</Typography>
           <Typography variant="h6" color="primary">BNB</Typography>
 
           <Typography variant="caption" >ADDRESS</Typography>

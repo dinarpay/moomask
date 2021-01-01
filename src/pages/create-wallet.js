@@ -2,7 +2,7 @@ import React from 'react'
 
 import { NavLink } from 'react-router-dom'
 
-import {Button, Box, TextField, FormControl, FormHelperText, Container} from '@material-ui/core';
+import {Button, Box, TextField, FormControl, FormHelperText} from '@material-ui/core';
 import {Alert} from '@material-ui/lab'
 
 import { makeStyles, useTheme } from '@material-ui/core/styles';
@@ -11,10 +11,10 @@ import Clipboard from 'react-clipboard.js';
 
 import Header from '../components/header';
 import { encryptKeyStore } from '../lib/keystore';
-import { ConnectionContext } from '../providers/connection-context';
-import { useRecoilState } from 'recoil';
 
-import { currentWallet } from '../store/atoms';
+import { useRecoilState, useRecoilValue } from 'recoil';
+
+import { currentWallet, networkProvider } from '../store/atoms';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -83,7 +83,7 @@ export default function CreateWallet() {
 
   const [, setWalletAtom] = useRecoilState(currentWallet)
 
-  const { web3 }= React.useContext(ConnectionContext)
+  const web3 = useRecoilValue(networkProvider)
 
   const [pass, setPass] = React.useState('');
   const [passwordError, setPasswordError] = React.useState(false);

@@ -2,16 +2,16 @@ import React from 'react'
 
 import { NavLink } from 'react-router-dom'
 
-import {Button, Box, TextField, FormControl, FormHelperText, Container} from '@material-ui/core';
+import {Button, Box, TextField, FormControl, FormHelperText } from '@material-ui/core';
 
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 
 import { encryptKeyStore } from '../lib/keystore';
-import { ConnectionContext } from '../providers/connection-context';
-import { useRecoilState } from 'recoil';
+
+import { useRecoilState, useRecoilValue } from 'recoil';
 import Header from '../components/header';
 
-import { currentWallet } from '../store/atoms';
+import { currentWallet, networkProvider } from '../store/atoms';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -49,7 +49,7 @@ export default function ImportWallet() {
 
   const [, setWalletAtom] = useRecoilState(currentWallet)
 
-  const { web3 }= React.useContext(ConnectionContext)
+  const web3 = useRecoilValue(networkProvider)
 
   const [key, setKey] = React.useState('');
 
@@ -59,8 +59,6 @@ export default function ImportWallet() {
   const [helperText, setHelperText] = React.useState(helperTextString)
 
   const [helperKeyText, setHelperKeyText] = React.useState('');
-
-  const [wallet, setWallet] = React.useState(null)
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -110,28 +108,24 @@ export default function ImportWallet() {
 
         <h1 className="auth-title">MOOMASK</h1>
         
-        { !wallet && 
-          <>
-            <form method="post" autoComplete="off" onSubmit={handleSubmit} className={classes.form}>
-              <FormControl className={classes.fieldPassword} error={keyError}>
-                <TextField id="key" value={key} onChange={e => setKey(e.target.value)}
-                  aria-describedby="password_helper" type="text" placeholder="Private Key"/>
-                <FormHelperText>
-                  {helperKeyText}
-                </FormHelperText>
-              </FormControl>
-              <FormControl className={classes.fieldPassword} error={passwordError}>
-                <TextField id="password" value={pass} onChange={e => setPass(e.target.value)}
-                  aria-describedby="password_helper" type="password" placeholder="New Password(min 8 chars)"/>
-                <FormHelperText>
-                  {helperText}
-                </FormHelperText>
-              </FormControl>
-              <Button variant="contained" color="primary" type="submit" className={classes.formButton}>Import private key</Button>
-            </form>
-            <NavLink to="/" className={classes.links} >Cancel</NavLink>
-          </>
-        }
+        <form method="post" autoComplete="off" onSubmit={handleSubmit} className={classes.form}>
+          <FormControl className={classes.fieldPassword} error={keyError}>
+            <TextField id="key" value={key} onChange={e => setKey(e.target.value)}
+              aria-describedby="password_helper" type="text" placeholder="Private Key"/>
+            <FormHelperText>
+              {helperKeyText}
+            </FormHelperText>
+          </FormControl>
+          <FormControl className={classes.fieldPassword} error={passwordError}>
+            <TextField id="password" value={pass} onChange={e => setPass(e.target.value)}
+              aria-describedby="password_helper" type="password" placeholder="New Password(min 8 chars)"/>
+            <FormHelperText>
+              {helperText}
+            </FormHelperText>
+          </FormControl>
+          <Button variant="contained" color="primary" type="submit" className={classes.formButton}>Import private key</Button>
+        </form>
+        <NavLink to="/" className={classes.links} >Cancel</NavLink>
 
       </Box>
     </>

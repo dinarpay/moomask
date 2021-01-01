@@ -4,7 +4,10 @@ import {
   selectorFamily
 } from 'recoil';
 
+import Web3 from 'web3'
+
 import Networks from '../config/networks'
+import { precisionFormat, formatAmount } from '../lib/format-utils'
 
 const NetworkMap = {};
 Networks.forEach(item => {
@@ -44,6 +47,13 @@ export const currentNetwork = selector({
   }
 });
 
+export const networkProvider = selector({
+  key: 'networkProvider',
+  get: ({get}) => {
+    const network = get(currentNetwork)
+    return new Web3( new Web3.providers.HttpProvider(network.main) );
+  }
+});
 
 export const currentWallet = atom({
   key: 'currentWallet',
@@ -52,6 +62,31 @@ export const currentWallet = atom({
     type: 'currentWallet'
   }
 });
+
+export const currentBalance = selectorFamily({
+  key: 'currentBalance',
+  default: 0,
+  persistence_UNSTABLE: {
+    type: 'currentBalance'
+  },
+  get: (token) => async( {get, set} ) => {
+    get(refreshCalled)
+    const wallet = get(currentWallet)
+    const web3 = get(networkProvider)
+    const balance = await web3.eth.getBalance(wallet.address)
+
+    return balance;
+  }
+})
+
+export const currentBalanceFormatted = selectorFamily({
+  key: 'currentBalanceFormatted',
+  default: 0,
+  get: ({token, precision}) => async ({get}) => {
+    const amount = await get(currentBalance(token))
+    return precisionFormat(precision)(amount);
+  }
+})
 
 const loadUrl = async ( url ) => {
   try {
