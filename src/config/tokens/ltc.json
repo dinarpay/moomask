@@ -1,0 +1,10 @@
+{
+    "title": "Binance-Peg Litecoin Token",
+    "code": "LTC",
+    "icon": "ltc.webp",
+    "decimals": 18,
+    "contract": {
+        "1": "0x4338665cbb7b2485a8855a139b75d5e34ab0db94",
+        "2": null
+    }
+}

@@ -6,7 +6,7 @@ import {Button, Box, TextField, FormControl, FormHelperText } from '@material-ui
 
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 
-import { encryptKeyStore } from '../lib/keystore';
+import { encryptKeyStore } from '../utils/keystore';
 
 import { useRecoilState, useRecoilValue } from 'recoil';
 import Header from '../components/header';

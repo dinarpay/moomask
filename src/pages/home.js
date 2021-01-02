@@ -11,7 +11,10 @@ import Balance from '../components/balance';
 import CardActions from '@material-ui/core/CardActions';
 
 import Transactions from '../components/transactions';
+import TokenList from '../components/token-list';
 import { useHistory } from 'react-router-dom';
+import { useRecoilValue } from 'recoil';
+import { networkProvider, currentNetwork } from '../store/atoms';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -62,7 +65,8 @@ export default function Home() {
       <Header loggedIn={true} >
         <Tabs value={value} variant="fullWidth"  onChange={handleChange} aria-label="Main Navigation">
           <Tab label="Account" {...a11yProps(0)} />
-          <Tab label="Transactions" {...a11yProps(1)} />
+          <Tab label="Tokens" {...a11yProps(1)} />
+          <Tab label="Transactions" {...a11yProps(2)} />
         </Tabs>
       </Header>
       <TabPanel value={value} index={0}>
@@ -80,6 +84,11 @@ export default function Home() {
         </React.Suspense>
       </TabPanel>
       <TabPanel value={value} index={1}>
+        <React.Suspense fallback={<div>Loading...</div>}>
+          <TokenList />
+        </React.Suspense>
+      </TabPanel>
+      <TabPanel value={value} index={2}>
         <React.Suspense fallback={<div>Loading...</div>}>
           <Transactions />
         </React.Suspense>

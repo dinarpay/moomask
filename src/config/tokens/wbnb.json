@@ -1,0 +1,10 @@
+{
+    "title": "Wrapped BNB",
+    "code": "WBNB",
+    "icon": "wbnb.webp",
+    "decimals": 18,
+    "contract": {
+        "1": "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c",
+        "2": null
+    }
+}

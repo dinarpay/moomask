@@ -1,0 +1,10 @@
+{
+    "title": "Venus",
+    "code": "XVS",
+    "icon": "xvs.webp",
+    "decimals": 18,
+    "contract": {
+        "1": "0xcf6bb5389c92bdda8a3747ddb454cb7a64626c63",
+        "2": "0xb9e0e753630434d7863528cc73cb7ac638a7c8ff"
+    }
+}

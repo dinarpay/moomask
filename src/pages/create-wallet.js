@@ -10,7 +10,7 @@ import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Clipboard from 'react-clipboard.js';
 
 import Header from '../components/header';
-import { encryptKeyStore } from '../lib/keystore';
+import { encryptKeyStore } from '../utils/keystore';
 
 import { useRecoilState, useRecoilValue } from 'recoil';
 

@@ -1,13 +1,16 @@
 import {
   atom,
   selector,
-  selectorFamily
+  selectorFamily,
+  waitForNone
 } from 'recoil';
 
 import Web3 from 'web3'
 
 import Networks from '../config/networks'
-import { precisionFormat, formatAmount } from '../lib/format-utils'
+import { precisionFormat } from '../utils/format-utils'
+import { ABI, loadSingle} from '../utils/token-loader'
+import ALL_TOKENS from '../config/tokens'
 
 const NetworkMap = {};
 Networks.forEach(item => {
@@ -50,7 +53,7 @@ export const currentNetwork = selector({
 export const networkProvider = selector({
   key: 'networkProvider',
   get: ({get}) => {
-    const network = get(currentNetwork)
+    var network = get(currentNetwork)
     return new Web3( new Web3.providers.HttpProvider(network.main) );
   }
 });
@@ -111,9 +114,45 @@ export const networkTransactions = selectorFamily({
 
     const resp = await loadUrl(fetchUrl);
     if(resp.message == 'OK') {
-      console.log(resp.result)
-      return resp.result;
+      return resp.result.reverse();
     }
     return [];
   }
 });
+
+export const tokenList = selector({
+  key: 'tokenList',
+  default: [],
+  get: async ({get}) => {
+    get(refreshCalled);
+    const network = get(currentNetwork);
+    const wallet = get(currentWallet);
+    
+    let toUseTokens = ALL_TOKENS.filter( item => {
+      return item.contract && item.contract[network.id];
+    });
+
+    toUseTokens = toUseTokens.map(item => {
+      const cr = item.contract[network.id]
+      return {...item, contract: cr};
+    });
+    
+    const tokenLoadables = get(waitForNone(
+      toUseTokens.map(token => tokenLoader({token: token, network, address: wallet.address}))
+    ));
+
+    return tokenLoadables
+      .filter(({state, contents}) => { 
+        return state === 'hasValue' && contents && contents.balance > 0;
+      })
+      .map(({contents}) => contents);
+  }
+});
+
+export const tokenLoader = selectorFamily({
+  key: 'tokenLoader',
+  get: ({token, network, address}) => async ({get}) => {
+    const balance = await loadSingle(network, token.contract, address);
+    return {...token, balance};
+  }
+})

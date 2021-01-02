@@ -4,13 +4,21 @@ import {  Button, Container, MenuItem } from '@material-ui/core'
 import BackButtonHeader from '../components/back-button-header'
 
 import { makeStyles } from '@material-ui/core/styles';
-import {FormControl, TextField, FormHelperText, Select} from '@material-ui/core';
+import {FormControl, TextField, FormHelperText, Select, LinearProgress} from '@material-ui/core';
 
 import Header from '../components/header'
-import { useRecoilValue } from 'recoil';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 
-import { currentBalanceFormatted, currentBalance, networkProvider, currentWallet } from '../store/atoms'
-import { decryptKeyStore } from '../lib/keystore'
+import { currentBalanceFormatted, currentBalance, networkProvider, currentWallet, refreshCalled } from '../store/atoms'
+import { decryptKeyStore } from '../utils/keystore'
+
+import Snackbar from '@material-ui/core/Snackbar';
+import MuiAlert from '@material-ui/lab/Alert';
+
+function Alert(props) {
+  return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
+
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -28,6 +36,10 @@ const useStyles = makeStyles((theme) => ({
   },
   formrow: {
     marginBottom: theme.spacing(2)
+  },
+  submitWrapper: {
+    display: 'flex',
+    flexDirection: 'column'
   }
 }));
 
@@ -38,6 +50,7 @@ export default function Send() {
   const defaultToken = 'bnb';
 
   const wallet = useRecoilValue( currentWallet );
+  const doReload = useSetRecoilState( refreshCalled );
   const rawBalance = useRecoilValue( currentBalance(defaultToken) );
   const balanceFormatted = useRecoilValue(currentBalanceFormatted( {token: defaultToken, precision} ));
 
@@ -47,8 +60,16 @@ export default function Send() {
   const [vals, setVals] = React.useState({address: '', token: defaultToken});
   const [helper, setHelper] = React.useState({address: ''})
 
+  const [openSuccess, setOpenSuccess] = React.useState(false);
+  const [openError, setOpenError] = React.useState(false);
+
+  const [formSubmitting, setFormSubmitting] = React.useState(false);
+
   const handleSubmit = async (e) =>{
     e.preventDefault();
+    if(formSubmitting) {
+      return false;
+    }
     const {address, amount, token} = vals;
     
     let hasErrors = false;
@@ -58,7 +79,7 @@ export default function Send() {
       er.address = true;
       msg.address = 'Address is required';
       hasErrors = true;
-    } else if(!provider.utils.isAddress(er.address)) {
+    } else if(!provider.utils.isAddress(address)) {
       er.address = true;
       msg.address = 'Invalid address';
       hasErrors = true;
@@ -81,27 +102,35 @@ export default function Send() {
       setErrors(er)
       setHelper(msg)
     } else {
-      const unlocked = decryptKeyStore(wallet.password, wallet.keystore)
-      if(!unlocked) {
-        // show message
-        return false;
-      }
-      const account = provider.eth.accounts.privateKeyToAccount(unlocked.privateKey)
-
-      provider.eth.accounts.wallet.add(account)
-
-      const gasPrice = await provider.eth.getGasPrice()
-
-      const result = await provider.eth.sendTransaction({from: wallet.address,
-        to: address, 
-        value: amount, 
-        gas: 2000000,
-        gasPrice: gasPrice});
+      try {
+        setFormSubmitting(true)
+        const unlocked = decryptKeyStore(wallet.password, wallet.keystore)
+        if(!unlocked) {
+          // show message
+          return false;
+        }
+        const account = provider.eth.accounts.privateKeyToAccount(unlocked.privateKey)
   
-      if (result.status) {
-        //TODO success
-      } else {
-        // failure
+        const gasPrice = await provider.eth.getGasPrice()
+
+        const rawAmount = Math.pow(10, precision) * parseFloat(amount);
+
+        const signed = await account.signTransaction({to: address, 
+          value: rawAmount, 
+          gas: 200000,
+          gasPrice: gasPrice});
+
+        const result = await provider.eth.sendSignedTransaction(signed.rawTransaction);
+        setFormSubmitting(false);
+        if (result.status) {
+          setOpenSuccess(true);
+          setVals(val => {return {...val, address: '', amount: ''}});
+        } else {
+          setOpenError(true);
+        }
+      } catch(e) {
+        setFormSubmitting(false)
+        console.error(e)
       }
     }
 
@@ -109,7 +138,7 @@ export default function Send() {
   }
 
   return (
-    <>
+    <React.Suspense fallback={<div>Loading...</div>}>
       <Header loggedIn={true}>
         <BackButtonHeader title="Send" />
       </Header>
@@ -144,11 +173,26 @@ export default function Send() {
               {helper.amount}
             </FormHelperText>
           </FormControl>
-
-          <Button variant="contained" color="primary" type="submit">Send</Button>
+          
+          <div className={classes.submitWrapper}>
+            <Button variant="contained" color="primary" type="submit" disabled={formSubmitting}>Send</Button>
+            {formSubmitting && <LinearProgress />}
+          </div>
 
         </form>
+
+        <Snackbar open={openSuccess} autoHideDuration={6000} onClose={() => setOpenSuccess(false)}>
+          <Alert onClose={() => setOpenSuccess(false)} severity="success">
+            Payment sent
+          </Alert>
+        </Snackbar>
+
+        <Snackbar open={openError} autoHideDuration={6000} onClose={() => setOpenError(false)}>
+          <Alert onClose={() => setOpenError(false)} severity="error">
+            Payment failed
+          </Alert>
+        </Snackbar>
       </Container>
-    </>
+    </React.Suspense>
   )
 }

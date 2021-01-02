@@ -1,0 +1,10 @@
+{
+    "title": "Prometeus",
+    "code": "PROM",
+    "icon": "prom.webp",
+    "decimals": 18,
+    "contract": {
+        "1": "0xaf53d56ff99f1322515e54fdde93ff8b3b7dafd5",
+        "2": null
+    }
+}
