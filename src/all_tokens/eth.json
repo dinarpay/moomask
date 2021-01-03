@@ -3,8 +3,9 @@
     "code": "ETH",
     "icon": "eth.webp",
     "decimals": 18,
+    "id": 23,
     "contract": {
-        "mainnet": "0x2170ed0880ac9a755fd29b2688956bd959f933f8",
-        "testnet": null
+        "1": "0x2170ed0880ac9a755fd29b2688956bd959f933f8",
+        "2": null
     }
 }

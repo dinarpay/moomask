@@ -2,6 +2,9 @@
 import { mapState } from 'vuex'
 import { getTokenAmount } from '../../lib/utils'
 
+import ALL_TOKENS from '../../all_tokens'
+import token from '../store/modules/token'
+
 export default {
     computed: mapState({
         token: state => state.token.tokens 
@@ -12,28 +15,21 @@ export default {
 
         async loadTokenData() {
             
-            //const tokenData = await API().getTokens({ showAll: 1, limit: 1 })
+            const token = await this.getTokenData() 
+            this.$store.commit('token/tokens', token) 
 
-            //if (tokenData.total > Object.keys(this.token).length) {
-                const token = await this.getTokenData() 
-                
-                this.$store.commit('token/tokens', token) 
-            //}
         },
 
         async getTokenData() {
             let tokens = {}
-            /*const data = await API().getTokens({ showAll: 1, limit: 4000 })
-
-            for (var i = 0; i < data.tokens.length; i++) {
-                if (!tokens[data.tokens[i].id]) {
-                    tokens[data.tokens[i].id] = data.tokens[i].name + ';' + data.tokens[i].abbr + ';' + data.tokens[i].precision
-                }
-            }*/
 
             const single = 'BNB;BNB;18';
             tokens['1'] = single;
 
+            for(let i = 0; i < ALL_TOKENS.length; i++) {
+                const at = ALL_TOKENS[i];
+                tokens[at.id.toString()] = `${at.code};${at.code};${at.decimals}`;
+            }
             return tokens
         },
 
@@ -41,7 +37,6 @@ export default {
             if (this.token[tokenId] == undefined) {
                 return ['TOKEN', 'TOKEN', '0']
             }
-
             return this.token[tokenId].split(';')
         }
     }

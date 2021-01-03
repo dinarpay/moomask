@@ -3,8 +3,9 @@
     "code": "BURGER",
     "icon": "burger.webp",
     "decimals": 18,
+    "id": 21,
     "contract": {
-        "mainnet": "0xae9269f27437f0fcbc232d39ec814844a51d6b8f",
-        "testnet": null
+        "1": "0xae9269f27437f0fcbc232d39ec814844a51d6b8f",
+        "2": null
     }
 }

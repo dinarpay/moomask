@@ -3,8 +3,9 @@
     "code": "LTC",
     "icon": "ltc.webp",
     "decimals": 18,
+    "id": 24,
     "contract": {
-        "mainnet": "0x4338665cbb7b2485a8855a139b75d5e34ab0db94",
-        "testnet": null
+        "1": "0x4338665cbb7b2485a8855a139b75d5e34ab0db94",
+        "2": null
     }
 }

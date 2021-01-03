@@ -9,6 +9,7 @@
 
             <div v-else>
                 <div class="token" v-for="token in account.tokens" :key="token.name" v-show="token.name !== '_'">
+                    <img :src="`tokens/${getTokenDetails(token.name)[1].toLowerCase()}.webp`" />
                     <span class="token-name">{{ getTokenDetails(token.name)[1] }}</span> 
                     <span class="token-balance">{{ $formatNumber(getTokenAmount(token.balance, getTokenDetails(token.name)[2]), { maximumSignificantDigits: parseInt(getTokenDetails(token.name)[2]) + 1 }) }}</span> 
                 </div>
@@ -40,12 +41,16 @@
     .token {
         display: flex;
         align-items: center;
-        justify-content: space-between;
+        justify-content: flex-start;
         box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
         background: #FFFFFF;
         border-radius: 5px;
         padding: 1rem;
         margin-bottom: 0.75rem;
+    }
+    .token img {
+        max-width:32px;
+        margin-right: 8px;
     }
     .token span {
         display: block;
@@ -53,6 +58,7 @@
     .token-name {
         color: #9E9E9E;
         font-size: 0.875rem;
+        flex:1;
     }
     .token-balance {
         font-size: 1rem;

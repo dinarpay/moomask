@@ -1,0 +1,11 @@
+{
+    "title": "Binance-Peg BTC Token",
+    "code": "BTCBB",
+    "icon": "btcbb.webp",
+    "decimals": 18,
+    "id": 20,
+    "contract": {
+        "1": "0x7130d2a12b9bcbfae4f2634d864a1ee1ce3ead9c",
+        "2": "0x6ce8da28e2f864420840cf74474eff5fd80e65b8"
+    }
+}

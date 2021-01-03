@@ -1,0 +1,11 @@
+{
+    "title": "Binance-Peg XRP Token",
+    "code": "XRP",
+    "icon": "xrp.webp",
+    "decimals": 18,
+    "id": 28,
+    "contract": {
+        "1": "0x1d2f0da169ceb9fc7b3144628db156f3f6c60dbe",
+        "2": "0xa83575490D7df4E2F47b7D38ef351a2722cA45b9"
+    }
+}
