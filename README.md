@@ -6,10 +6,10 @@ MooMask is a browser extension wallet for BSC. We don't save the private key in 
 * Generate a new wallet.
 * Import wallet from private key.
 * Export private key.
-* View BNB and Peggy Token balances.
+* View BNB, BEP-20 and Peggy Token balances.
 * View wallet address with the QR code.
 * View recent transactions.
-* Send & receive BNB and Peggy Tokens.
+* Send & receive BNB, BEP-20 and Peggy Tokens.
 * Switch the network between Mainnet and Testnet.
 
 ## Manual Installation
