@@ -105,14 +105,12 @@ const router = new Router({
 router.beforeEach((to, from, next) => {
     if (to.matched.some(record => record.meta.requiresAuth)) {
         if (!store.state.wallet.address) {
-            console.log('>>Require signin route')
             next({ path: '/signin' })
         }else {
             next()
         }
     }else if (to.matched.some(record => record.meta.requiresKeystore)) {
         if (!store.state.wallet.keystore) {
-            console.log('>>Require create-wallet route')
             next({ path: '/create-wallet' })
         }else {
             next()

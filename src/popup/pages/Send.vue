@@ -125,23 +125,29 @@
                     amount = getTokenRawAmount(this.amount, this.getTokenDetails(this.selectedToken.name)[2])
                 }
 
-                try {
-                    console.log('sending amount', amount)
+                console.log(this.selectedToken);
+                console.log(this.getTokenDetails(this.selectedToken.name));
 
+                try {
                     const web3 = new Web3( new Web3.providers.HttpProvider(this.network.main) )
                     const pAccount = web3.eth.accounts.privateKeyToAccount(wallet.privateKey)
                     
                     web3.eth.accounts.wallet.add(pAccount)
+
+                    let result = {};
+
+                    if(this.selectedToken.name !== "1") {
+                        result = await this.do20TokenTransfer(wallet, this.selectedToken.name,  this.receipient, amount);
+                    } else {
+                        const gasPrice = await web3.eth.getGasPrice()
+                        result = await web3.eth.sendTransaction({from: wallet.address,
+                            to: this.receipient, 
+                            value:amount, 
+                            gas: 2000000,
+                            gasPrice: gasPrice});
                     
-                    const gasPrice = await web3.eth.getGasPrice()
-
-                    const result = await web3.eth.sendTransaction({from: wallet.address,
-                     to: this.receipient, 
-                     value:amount, 
-                     gas: 2000000,
-                     gasPrice: gasPrice});
-                
-
+                    }
+                    
                     this.$store.commit('loading', false)
 
                     this.message.show = true
@@ -149,15 +155,7 @@
                     if (result.status) {
                         this.message.type = 'success'
                         this.message.text = 'Payment has been successfully sent'
-                        console.log('Existing transactions')
-                        console.log(this.transactions)
-                        let trans = [];
-                        if(!this.transactions) {
-                            trans = this.transactions;
-                        }
-                        trans.push(result);
-                        this.$store.commit('account/transactions', trans)
-                    }else {
+                    } else {
                         this.message.type = 'error'
                         this.message.text = result.message
                     }
@@ -239,8 +237,6 @@
                 if (token.name !== '_') {
                     precision = parseInt(this.getTokenDetails(token.name)[2])
                 }
-                console.log('Preciion')
-                console.log(precision)
                 //return token.balance;
                 return this.$formatNumber(this.getTokenAmount(token.balance, precision), { maximumSignificantDigits: precision + 1 })
             }
