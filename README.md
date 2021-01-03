@@ -11,6 +11,13 @@ MooMask is a browser extension wallet for BSC. We don't save the private key in 
 * View recent transactions.
 * Send & receive BNB and Peggy Tokens.
 * Switch the network between Mainnet and Testnet.
+
+## Manual Installation
+* Download _moomask.zip_ from the *zip* folder.
+* Unzip _moomask.zip_.
+* Go to Chrome Extensions page and activate the Developer Mode.
+* Click Load Unpacked button and point it to moomask folder.
+
 ## Build Extension
 
 * Install [node.js](https://nodejs.org/) and npm.
