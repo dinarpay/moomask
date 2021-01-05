@@ -11,7 +11,7 @@ export function precisionFormat(precision) {
       let fraction = amt.substring(dotPlace + 1);
       if(fraction.length > 2) {
         fraction = fraction.substring(0, 2);
-      } else if(fraction.length == 1) {
+      } else if(fraction.length === 1) {
         fraction = fraction + '0';
       }
       amt = amt.substring(0, dotPlace);

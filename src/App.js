@@ -70,9 +70,7 @@ function App() {
                 <AboutUs />
               </Route>
               <Route path="/send">
-                <React.Suspense fallback={<div>Loading...</div>}>
-                  <Send />
-                </React.Suspense>
+                <Send />
               </Route>
               <Route path="/receive">
                 <Receive />

@@ -9,8 +9,8 @@ import Web3 from 'web3'
 
 import Networks from '../config/networks'
 import { precisionFormat } from '../utils/format-utils'
-import { ABI, loadSingle} from '../utils/token-loader'
-import ALL_TOKENS from '../config/tokens'
+import { loadSingle} from '../utils/token-loader'
+import ALL_TOKENS, { BNB_CODE } from '../config/tokens'
 
 const NetworkMap = {};
 Networks.forEach(item => {
@@ -72,13 +72,14 @@ export const currentBalance = selectorFamily({
   persistence_UNSTABLE: {
     type: 'currentBalance'
   },
-  get: (token) => async( {get, set} ) => {
+  get: (token) => async( {get} ) => {
     get(refreshCalled)
-    const wallet = get(currentWallet)
-    const web3 = get(networkProvider)
-    const balance = await web3.eth.getBalance(wallet.address)
+    const network = get(currentNetwork);
+    const wallet = get(currentWallet);
 
-    return balance;
+    const info = await get(tokenLoader({ token: token, network, address: wallet.address }));
+
+    return info.balance;
   }
 })
 
@@ -113,7 +114,7 @@ export const networkTransactions = selectorFamily({
     const fetchUrl = `${network.scan}?module=account&action=txlist&address=${wallet.address}&startblock=${startBlock}&endblock=99999999&apikey=${network.apiKey}`;
 
     const resp = await loadUrl(fetchUrl);
-    if(resp.message == 'OK') {
+    if(resp.message === 'OK') {
       return resp.result.reverse();
     }
     return [];
@@ -129,10 +130,13 @@ export const tokenList = selector({
     const wallet = get(currentWallet);
     
     let toUseTokens = ALL_TOKENS.filter( item => {
-      return item.contract && item.contract[network.id];
+      return item.code === BNB_CODE || (item.contract && item.contract[network.id]);
     });
 
     toUseTokens = toUseTokens.map(item => {
+      if(item.code === BNB_CODE) {
+        return item;
+      }
       const cr = item.contract[network.id]
       return {...item, contract: cr};
     });
@@ -152,6 +156,12 @@ export const tokenList = selector({
 export const tokenLoader = selectorFamily({
   key: 'tokenLoader',
   get: ({token, network, address}) => async ({get}) => {
+    if (token.code === BNB_CODE) {
+      const wallet = get(currentWallet)
+      const web3 = get(networkProvider)
+      const bal = await web3.eth.getBalance(wallet.address)
+      return {...token, balance: bal};
+    }
     const balance = await loadSingle(network, token.contract, address);
     return {...token, balance};
   }

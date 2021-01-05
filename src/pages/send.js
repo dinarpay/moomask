@@ -1,19 +1,22 @@
 import React from 'react'
 
-import {  Button, Container, MenuItem } from '@material-ui/core'
+import {  Button, Container } from '@material-ui/core'
 import BackButtonHeader from '../components/back-button-header'
 
 import { makeStyles } from '@material-ui/core/styles';
-import {FormControl, TextField, FormHelperText, Select, LinearProgress} from '@material-ui/core';
+import {FormControl, TextField, FormHelperText, LinearProgress} from '@material-ui/core';
 
 import Header from '../components/header'
-import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { useRecoilValue } from 'recoil';
 
-import { currentBalanceFormatted, currentBalance, networkProvider, currentWallet, refreshCalled } from '../store/atoms'
+import { networkProvider, currentWallet } from '../store/atoms'
 import { decryptKeyStore } from '../utils/keystore'
 
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
+
+import { DEFAULT_TOKEN } from '../config/tokens';
+import TokenMenuItems from '../components/token-menu-list';
 
 function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -46,18 +49,11 @@ const useStyles = makeStyles((theme) => ({
 export default function Send() {
   const classes = useStyles( );
 
-  const precision = 18;
-  const defaultToken = 'bnb';
-
   const wallet = useRecoilValue( currentWallet );
-  const doReload = useSetRecoilState( refreshCalled );
-  const rawBalance = useRecoilValue( currentBalance(defaultToken) );
-  const balanceFormatted = useRecoilValue(currentBalanceFormatted( {token: defaultToken, precision} ));
-
   const provider = useRecoilValue( networkProvider )
 
   const [errors, setErrors] = React.useState({});
-  const [vals, setVals] = React.useState({address: '', token: defaultToken});
+  const [vals, setVals] = React.useState({address: '', token: DEFAULT_TOKEN});
   const [helper, setHelper] = React.useState({address: ''})
 
   const [openSuccess, setOpenSuccess] = React.useState(false);
@@ -90,8 +86,8 @@ export default function Send() {
       er.amount = true;
       msg.amount = 'Add amount to send';
     } else {
-      const amountRaw = amount * Math.pow(10, precision);
-      if(amountRaw > rawBalance) {
+      const amountRaw = amount * Math.pow(10, token.decimals);
+      if(amountRaw > token.balance) {
         hasErrors = true;
         er.amount = true;
         msg.amount = 'Insufficient balance';
@@ -109,11 +105,12 @@ export default function Send() {
           // show message
           return false;
         }
+
         const account = provider.eth.accounts.privateKeyToAccount(unlocked.privateKey)
-  
+
         const gasPrice = await provider.eth.getGasPrice()
 
-        const rawAmount = Math.pow(10, precision) * parseFloat(amount);
+        const rawAmount = Math.pow(10, token.decimals) * parseFloat(amount);
 
         const signed = await account.signTransaction({to: address, 
           value: rawAmount, 
@@ -157,11 +154,9 @@ export default function Send() {
           </FormControl>
 
           <FormControl error={errors.token} className={classes.formrow}>
-            <Select id="token" value={vals.token} label="Token" onChange={(e) => 
-            setVals(val => { return {...val, token: e.target.value}; })
-            }>
-              <MenuItem value={'bnb'}>BNB ({balanceFormatted})</MenuItem>
-            </Select>
+            <React.Suspense fallback={<div>Loading...</div>}>
+              <TokenMenuItems value={vals.token} setValue={setVals} />
+            </React.Suspense>
           </FormControl>
 
           <FormControl error={errors.amount} className={classes.formrow}>

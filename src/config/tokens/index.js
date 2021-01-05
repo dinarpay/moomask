@@ -8,5 +8,11 @@ const  VENUS = require('./venus.json');
 const  WBNB = require('./wbnb.json');
 const XRP = require('./xrp.json')
 
-const ALL_TOKENS = [BTCB, BURGER, BUSD, ETH, LTC, PROM, VENUS, WBNB, XRP];
+const BNB = require('./bnb.json')
+
+const ALL_TOKENS = [BNB, BTCB, BURGER, BUSD, ETH, LTC, PROM, VENUS, WBNB, XRP];
+
+export const BNB_CODE = 'BNB';
+export const DEFAULT_TOKEN = BNB;
+
 export default ALL_TOKENS;
