@@ -3,6 +3,9 @@
         <app-header @refresh="refreshAccount" />
 
         <main class="main">
+            <div v-if="currentNetwork.type === 'testnet'" class="free-tokens">
+                <a href="https://testnet.binance.org/faucet-smart" target="_blank">Click here</a> to get some free tokens.
+            </div>
             <div v-if="account.tokens.length === 0" class="message-empty">
                 No tokens found
             </div>
@@ -21,8 +24,14 @@
 <script>
     import account from '../mixins/account'
     import AppHeader from '../components/AppHeader.vue'
+    import { mapState } from 'vuex'
 
     export default {
+        computed: mapState({
+            address: state => state.wallet.address,
+            currentNetwork: state => state.network
+        }),
+
         mixins: [account],
 
         components: {
@@ -38,6 +47,10 @@
 </script>
 
 <style>
+    .free-tokens {
+        font-size: 14px;
+        padding-bottom: 14px;
+    }
     .token {
         display: flex;
         align-items: center;
