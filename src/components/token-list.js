@@ -50,7 +50,7 @@ export default function TokenList() {
   return (<>
     {network === 2 && <Alert severity="info" icon={false} className={classes.freeToken}>
             <strong>
-            <a href="https://testnet.binance.org/faucet-smart" target="_blank">Click here</a>
+            <a href="https://testnet.binance.org/faucet-smart" target="_blank" rel="noreferrer">Click here</a>
             </strong> to get some tokens</Alert>}
   <FixedSizeList height={500} width={'100%'} itemSize={70} itemCount={list.length}>
     {renderRow}

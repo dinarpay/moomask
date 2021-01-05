@@ -5,9 +5,9 @@ import { makeStyles } from '@material-ui/core/styles';
 
 import { useRecoilValue } from 'recoil';
 
-import { currentWallet, currentBalanceFormatted, tokenList } from '../store/atoms';
+import { currentWallet, currentBalanceFormatted } from '../store/atoms';
 
-import ALL_TOKENS, { DEFAULT_TOKEN } from '../config/tokens';
+import { DEFAULT_TOKEN } from '../config/tokens';
 
 const useStyles = makeStyles(() => ({
   longText: {

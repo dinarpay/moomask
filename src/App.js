@@ -48,7 +48,7 @@ function App() {
   const [loggedIn, setLoggedIn] = React.useState(false);
 
   React.useEffect(() => {
-    if(walletAtom && walletAtom.address && walletAtom.address != '') {
+    if(walletAtom && walletAtom.address) {
       setLoggedIn(true);
     }
   }, [walletAtom]);

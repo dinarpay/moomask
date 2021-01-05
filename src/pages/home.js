@@ -86,7 +86,7 @@ export default function Home() {
         <React.Suspense fallback={<div>Loading...</div>}>
           {network === 2 && <Alert severity="info" icon={false} className={classes.freeToken}>
             <strong>
-            <a href="https://testnet.binance.org/faucet-smart" target="_blank">Click here</a>
+            <a href="https://testnet.binance.org/faucet-smart" target="_blank" rel="noreferrer">Click here</a>
             </strong> to get some tokens</Alert>}
           <Balance >
             <CardActions>

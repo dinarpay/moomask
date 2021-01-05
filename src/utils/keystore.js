@@ -6,9 +6,11 @@ import { v4 as uuidv4} from 'uuid'
 
 // Convert a hex string to a byte array
 function hexToBytes(hex) {
-    for (var bytes = [], c = 0; c < hex.length; c += 2)
+  const bytes = []
+  for (let c = 0; c < hex.length; c += 2) {
     bytes.push(parseInt(hex.substr(c, 2), 16));
-    return bytes;
+  }
+  return bytes;
 }
 
 // Convert a byte array to a hex string
@@ -51,10 +53,10 @@ function bytesToString(arr) {
   }
 
 function stringToBytes(str) {
-    var bytes = new Array();
-    var len, c;
-    len = str.length;
-    for (var i = 0; i < len; i++) {
+    const bytes = [];
+    const len = str.length;
+    let c;
+    for (let i = 0; i < len; i++) {
       c = str.charCodeAt(i);
       if (c >= 0x010000 && c <= 0x10FFFF) {
         bytes.push(((c >> 18) & 0x07) | 0xF0);
@@ -73,7 +75,6 @@ function stringToBytes(str) {
       }
     }
     return bytes;
-  
   }
 
 export function encryptKey(password, salt) {
