@@ -138,7 +138,7 @@ export default function Send() {
   }
 
   return (
-    <React.Suspense fallback={<div>Loading...</div>}>
+    <>
       <Header loggedIn={true}>
         <BackButtonHeader title="Send" />
       </Header>
@@ -193,6 +193,6 @@ export default function Send() {
           </Alert>
         </Snackbar>
       </Container>
-    </React.Suspense>
+    </>
   )
 }

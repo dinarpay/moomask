@@ -7,6 +7,5 @@ export const loadSingle = async (network, contractAddress, ownAddress) => {
   
   let contract = new provider.eth.Contract( ABI , contractAddress )
   const balResult = await contract.methods.balanceOf(ownAddress).call();
-  console.log(balResult);
   return balResult;
 }

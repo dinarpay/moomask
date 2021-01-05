@@ -14,7 +14,12 @@ import Transactions from '../components/transactions';
 import TokenList from '../components/token-list';
 import { useHistory } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
-import { networkProvider, currentNetwork } from '../store/atoms';
+import { selectedNetworkId } from '../store/atoms';
+import MuiAlert from '@material-ui/lab/Alert';
+
+function Alert(props) {
+  return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -43,10 +48,16 @@ function a11yProps(index) {
   };
 }
 
+
+
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
     backgroundColor: theme.palette.background.paper,
+  },
+  freeToken: {
+    marginBottom: theme.spacing(2),
+    textAlign: 'center'
   }
 }));
 
@@ -55,6 +66,8 @@ export default function Home() {
   const [value, setValue] = React.useState(0);
 
   const history = useHistory();
+
+  const network = useRecoilValue( selectedNetworkId );
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -71,6 +84,10 @@ export default function Home() {
       </Header>
       <TabPanel value={value} index={0}>
         <React.Suspense fallback={<div>Loading...</div>}>
+          {network === 2 && <Alert severity="info" icon={false} className={classes.freeToken}>
+            <strong>
+            <a href="https://testnet.binance.org/faucet-smart" target="_blank">Click here</a>
+            </strong> to get some tokens</Alert>}
           <Balance >
             <CardActions>
               <Button size="small" onClick={() => history.push('/send')} >
