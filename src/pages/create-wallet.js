@@ -1,5 +1,7 @@
 import React from 'react'
 
+import { useHistory } from 'react-router-dom'
+
 import { NavLink } from 'react-router-dom'
 
 import {Button, Box, TextField, FormControl, FormHelperText} from '@material-ui/core';
@@ -83,13 +85,15 @@ export default function CreateWallet() {
 
   const [, setWalletAtom] = useRecoilState(currentWallet)
 
-  const web3 = useRecoilValue(networkProvider)
+  const provider = useRecoilValue(networkProvider)
 
   const [pass, setPass] = React.useState('');
   const [passwordError, setPasswordError] = React.useState(false);
   const [helperText, setHelperText] = React.useState(helperTextString)
 
   const [wallet, setWallet] = React.useState(null)
+
+  const history = useHistory();
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -102,7 +106,7 @@ export default function CreateWallet() {
       setPasswordError(false);
     }
     
-    setWallet(web3.eth.accounts.create());
+    setWallet(provider.eth.accounts.create());
   }
 
   const copyConfirmed = (event) => {
@@ -114,6 +118,8 @@ export default function CreateWallet() {
       password: pass,
       keystore: keystore
     });
+
+    history.push('/');
 
     return false;
   }

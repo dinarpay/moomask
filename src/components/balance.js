@@ -5,7 +5,7 @@ import { makeStyles } from '@material-ui/core/styles';
 
 import { useRecoilValue } from 'recoil';
 
-import { currentWallet, currentBalanceFormatted } from '../store/atoms';
+import { currentWallet, currentBalance } from '../store/atoms';
 
 import { DEFAULT_TOKEN } from '../config/tokens';
 
@@ -18,12 +18,10 @@ const useStyles = makeStyles(() => ({
 
 export default function Balance({children}) {
   const classes = useStyles( );
-
-  const precision = 18;
   
   const wallet = useRecoilValue(currentWallet);
 
-  const balance = useRecoilValue(currentBalanceFormatted({token: DEFAULT_TOKEN, precision}));
+  const balance = useRecoilValue(currentBalance(DEFAULT_TOKEN));
 
   return (
     <Card>

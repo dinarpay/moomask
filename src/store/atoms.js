@@ -5,11 +5,9 @@ import {
   waitForNone
 } from 'recoil';
 
-import Web3 from 'web3'
-
 import Networks from '../config/networks'
 import { precisionFormat } from '../utils/format-utils'
-import { loadSingle} from '../utils/token-loader'
+import { getProvider, loadSingle } from '../utils/token-utils'
 import ALL_TOKENS, { BNB_CODE } from '../config/tokens'
 
 const NetworkMap = {};
@@ -54,7 +52,7 @@ export const networkProvider = selector({
   key: 'networkProvider',
   get: ({get}) => {
     var network = get(currentNetwork)
-    return new Web3( new Web3.providers.HttpProvider(network.main) );
+    return getProvider(network.main);
   }
 });
 
@@ -77,6 +75,10 @@ export const currentBalance = selectorFamily({
     const network = get(currentNetwork);
     const wallet = get(currentWallet);
 
+    console.log('>> CurrentBalance')
+    console.log(network)
+    console.log(wallet)
+
     const info = await get(tokenLoader({ token: token, network, address: wallet.address }));
 
     return info.balance;
@@ -86,9 +88,9 @@ export const currentBalance = selectorFamily({
 export const currentBalanceFormatted = selectorFamily({
   key: 'currentBalanceFormatted',
   default: 0,
-  get: ({token, precision}) => async ({get}) => {
+  get: ({token}) => async ({get}) => {
     const amount = await get(currentBalance(token))
-    return precisionFormat(precision)(amount);
+    return precisionFormat(token.decimals)(amount);
   }
 })
 
@@ -160,9 +162,11 @@ export const tokenLoader = selectorFamily({
       const wallet = get(currentWallet)
       const web3 = get(networkProvider)
       const bal = await web3.eth.getBalance(wallet.address)
+      console.log('got balance')
+      console.log(bal)
       return {...token, balance: bal};
     }
-    const balance = await loadSingle(network, token.contract, address);
+    const balance = await loadSingle(network, token, address);
     return {...token, balance};
   }
 })

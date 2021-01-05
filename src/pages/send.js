@@ -9,7 +9,7 @@ import {FormControl, TextField, FormHelperText, LinearProgress} from '@material-
 import Header from '../components/header'
 import { useRecoilValue } from 'recoil';
 
-import { networkProvider, currentWallet } from '../store/atoms'
+import { networkProvider, currentWallet, currentNetwork } from '../store/atoms'
 import { decryptKeyStore } from '../utils/keystore'
 
 import Snackbar from '@material-ui/core/Snackbar';
@@ -17,6 +17,8 @@ import MuiAlert from '@material-ui/lab/Alert';
 
 import { DEFAULT_TOKEN } from '../config/tokens';
 import TokenMenuItems from '../components/token-menu-list';
+
+import { doTransfer } from '../utils/token-utils';
 
 function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -50,7 +52,9 @@ export default function Send() {
   const classes = useStyles( );
 
   const wallet = useRecoilValue( currentWallet );
-  const provider = useRecoilValue( networkProvider )
+  const provider = useRecoilValue( networkProvider );
+
+  const network = useRecoilValue( currentNetwork );
 
   const [errors, setErrors] = React.useState({});
   const [vals, setVals] = React.useState({address: '', token: DEFAULT_TOKEN});
@@ -106,18 +110,8 @@ export default function Send() {
           return false;
         }
 
-        const account = provider.eth.accounts.privateKeyToAccount(unlocked.privateKey)
-
-        const gasPrice = await provider.eth.getGasPrice()
-
-        const rawAmount = Math.pow(10, token.decimals) * parseFloat(amount);
-
-        const signed = await account.signTransaction({to: address, 
-          value: rawAmount, 
-          gas: 200000,
-          gasPrice: gasPrice});
-
-        const result = await provider.eth.sendSignedTransaction(signed.rawTransaction);
+        const result = await doTransfer(network, token, unlocked.privateKey, amount, address);
+        
         setFormSubmitting(false);
         if (result.status) {
           setOpenSuccess(true);
