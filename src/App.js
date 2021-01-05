@@ -13,7 +13,7 @@ import { useRecoilState } from 'recoil';
 import { currentWallet } from './store/atoms';
 
 import {
-  BrowserRouter as Router,
+  MemoryRouter as Router,
   Switch,
   Route
 } from "react-router-dom";
@@ -49,7 +49,6 @@ function App() {
 
   React.useEffect(() => {
     if(walletAtom && walletAtom.address && walletAtom.address != '') {
-      console.log('go to home screen');
       setLoggedIn(true);
     }
   }, [walletAtom]);
@@ -84,7 +83,6 @@ function App() {
             </Switch>
         </Router>
     </ThemeProvider>
-    
   );
 }
 

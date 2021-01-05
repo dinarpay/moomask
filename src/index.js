@@ -5,21 +5,22 @@ import App from './App';
 //import reportWebVitals from './reportWebVitals';
 
 import { RecoilRoot } from "recoil";
-//import recoilPersist from 'recoil-persist'
+import recoilPersist from 'recoil-persist'
 
-/*const { RecoilPersist, updateState } = recoilPersist([], {
+const { RecoilPersist, updateState } = recoilPersist([], {
   key: 'moomask-persist', // this key is using to store data in local storage
   storage: localStorage
-})*/
+})
 
 ReactDOM.render(
   <React.StrictMode>
-    <RecoilRoot >
+    <RecoilRoot initializeState={updateState}>
+      <RecoilPersist />
       <App />
     </RecoilRoot>  
   </React.StrictMode>,
   document.getElementById('root')
-  );
+);
   
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))

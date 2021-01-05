@@ -11,12 +11,14 @@ import {useHistory} from 'react-router-dom';
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
+    minHeight: theme.spacing(6)
   },
   menuButton: {
-    marginRight: theme.spacing(2),
+    marginRight: theme.spacing(1),
   },
   title: {
     flexGrow: 1,
+    fontSize: '1rem'
   },
 }));
 
@@ -34,7 +36,7 @@ export default function BackButtonHeader({title}) {
   }
 
   return (
-    <Toolbar>
+    <Toolbar className={classes.root}>
       <IconButton edge="start" onClick={handleBackClick} className={classes.menuButton} color="inherit" aria-label="menu">
         <ArrowBack />
       </IconButton>
