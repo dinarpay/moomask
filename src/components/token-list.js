@@ -11,6 +11,7 @@ import { Avatar, ListItemAvatar } from '@material-ui/core';
 import { selectedNetworkId } from '../store/atoms';
 import { makeStyles } from '@material-ui/core/styles';
 import MuiAlert from '@material-ui/lab/Alert';
+import { precisionFormat } from '../utils/format-utils';
 
 function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -29,10 +30,6 @@ export default function TokenList() {
   const list = useRecoilValue(tokenList);
   const network = useRecoilValue( selectedNetworkId );
 
-  const formatBal = (amount, precision) => {
-    return amount / Math.pow(10, precision);
-  }
-
   const renderRow = (props) => {
     const { index, style } = props;
     const di = list[index];
@@ -42,16 +39,18 @@ export default function TokenList() {
         <ListItemAvatar>
           <Avatar alt={di.title} src={`/tokens/${di.icon}`} />
         </ListItemAvatar>
-        <ListItemText primary={`${formatBal(di.balance, di.decimals)} ${di.code}`} secondary={di.title} />
+        <ListItemText primary={`${precisionFormat(di.decimals)(di.balance)} ${di.code}`} secondary={di.title} />
       </ListItem>
     );
   }
 
   return (<>
-    {network === 2 && <Alert severity="info" icon={false} className={classes.freeToken}>
-            <strong>
-            <a href="https://testnet.binance.org/faucet-smart" target="_blank" rel="noreferrer">Click here</a>
-            </strong> to get some tokens</Alert>}
+    {network === 2 && 
+      <Alert severity="info" icon={false} className={classes.freeToken}>
+        <strong>
+          <a href="https://testnet.binance.org/faucet-smart" target="_blank" rel="noreferrer">Click here</a>
+        </strong> to get some tokens
+      </Alert>}
   <FixedSizeList height={500} width={'100%'} itemSize={70} itemCount={list.length}>
     {renderRow}
   </FixedSizeList>

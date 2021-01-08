@@ -32,12 +32,9 @@ export const currentNetwork = selector({
   key: 'currentNetwork',
   get: ({get}) => {
     const selNet = get(selectedNetworkId)
-    console.log('selecteNetwork ', selNet);
     if(typeof NetworkMap[selNet] !== 'undefined') {
-      console.log(NetworkMap[selNet]);
       return NetworkMap[selNet]
     }
-    console.log('returning null');
     return null;
   },
   set: ({set}, newValue) => {
@@ -145,7 +142,7 @@ export const tokenList = selector({
 
     return tokenLoadables
       .filter(({state, contents}) => { 
-        return state === 'hasValue' && contents && contents.balance > 0;
+        return state === 'hasValue'
       })
       .map(({contents}) => contents);
   }
@@ -154,6 +151,8 @@ export const tokenList = selector({
 export const tokenLoader = selectorFamily({
   key: 'tokenLoader',
   get: ({token, network, address}) => async ({get}) => {
+    get(refreshCalled)
+
     if (token.code === BNB_CODE) {
       const wallet = get(currentWallet)
       const web3 = get(networkProvider)

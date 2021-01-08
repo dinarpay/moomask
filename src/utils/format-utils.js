@@ -4,6 +4,9 @@ export function formatAmount(amount, precision) {
 
 export function precisionFormat(precision) {
   return function(amount) {
+    if(isNaN(amount)) {
+      return 0;
+    }
     let amt = amount / Math.pow(10, precision);
     amt = amt.toString();
     let dotPlace = amt.indexOf('.');

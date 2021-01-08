@@ -11,8 +11,7 @@ import { refreshCalled } from '../store/atoms';
 
 const useStyles = makeStyles((theme) => ({
   refreshBtn: {
-    paddingRight: '0',
-    paddingLeft: theme.spacing(2)
+    padding: theme.spacing(1)
   }
 }));
 

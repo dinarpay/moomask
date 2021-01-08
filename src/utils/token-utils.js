@@ -24,32 +24,29 @@ export const getContractAddress = (network, token) => {
 export const getProviderContractDetails = async (network, contractAddress, ownAddress) => {
   let provider = getProvider(network);
   let contract = new provider.eth.Contract( ABI , contractAddress )
-
   const balance = await contract.methods.balanceOf(ownAddress).call();
   return { provider, contract, balance };
 }
 
 export const loadSingle = async (network, token, ownAddress) => {
-  let { balance } = getProviderContractDetails(network, getContractAddress(network, token), ownAddress);
+  let { balance } = await getProviderContractDetails(network, getContractAddress(network, token) , ownAddress);
   return balance;
 }
 
 export const transferToAddresss = async (network, token, privateKey, amount, destAddress) => {
   const provider = getProvider(network);
-
   const contractAddress = getContractAddress(network, token);
-
+  
   const account = provider.eth.accounts.privateKeyToAccount( privateKey );
-
-  let { contract, balance } = getProviderContractDetails(network, contractAddress, account.address);
-
+  
+  let { contract, balance } = await getProviderContractDetails(network, contractAddress, account.address);
+  
   const nonceCount = await provider.eth.getTransactionCount(account.address);
   const gasPrice = await provider.eth.getGasPrice()
-
   const rawAmount = Math.pow(10, token.decimals) * parseFloat(amount);
-  
+
   try {
-      if(balance > rawAmount) {
+    if(balance > rawAmount) {
           const transferAmount = "0x" + rawAmount.toString(16)
           const rawTransaction = {
               "from": account.address,

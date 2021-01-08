@@ -88,18 +88,16 @@ export default function Home() {
             <strong>
             <a href="https://testnet.binance.org/faucet-smart" target="_blank" rel="noreferrer">Click here</a>
             </strong> to get some tokens</Alert>}
-            <React.Suspense fallback={<div>Loading...</div>}>
-              <Balance >
-              <CardActions>
-                <Button size="small" onClick={() => history.push('/send')} >
-                  Send
-                </Button>
-                <Button size="small" onClick={() => history.push('/receive')}>
-                  Receive
-                </Button>
-              </CardActions>
-            </Balance>
-            </React.Suspense>
+            <Balance >
+            <CardActions>
+              <Button size="small" onClick={() => history.push('/send')} >
+                Send
+              </Button>
+              <Button size="small" onClick={() => history.push('/receive')}>
+                Receive
+              </Button>
+            </CardActions>
+          </Balance>
         </React.Suspense>
       </TabPanel>
       <TabPanel value={value} index={1}>
