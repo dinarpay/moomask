@@ -32,11 +32,12 @@ export const currentNetwork = selector({
   key: 'currentNetwork',
   get: ({get}) => {
     const selNet = get(selectedNetworkId)
-
+    console.log('selecteNetwork ', selNet);
     if(typeof NetworkMap[selNet] !== 'undefined') {
+      console.log(NetworkMap[selNet]);
       return NetworkMap[selNet]
     }
-
+    console.log('returning null');
     return null;
   },
   set: ({set}, newValue) => {
@@ -52,7 +53,7 @@ export const networkProvider = selector({
   key: 'networkProvider',
   get: ({get}) => {
     var network = get(currentNetwork)
-    return getProvider(network.main);
+    return getProvider(network);
   }
 });
 
@@ -70,17 +71,12 @@ export const currentBalance = selectorFamily({
   persistence_UNSTABLE: {
     type: 'currentBalance'
   },
-  get: (token) => async( {get} ) => {
+  get: ({token}) => async( {get} ) => {
     get(refreshCalled)
     const network = get(currentNetwork);
     const wallet = get(currentWallet);
 
-    console.log('>> CurrentBalance')
-    console.log(network)
-    console.log(wallet)
-
     const info = await get(tokenLoader({ token: token, network, address: wallet.address }));
-
     return info.balance;
   }
 })
@@ -89,7 +85,7 @@ export const currentBalanceFormatted = selectorFamily({
   key: 'currentBalanceFormatted',
   default: 0,
   get: ({token}) => async ({get}) => {
-    const amount = await get(currentBalance(token))
+    const amount = await get(currentBalance({token}))
     return precisionFormat(token.decimals)(amount);
   }
 })
@@ -162,8 +158,6 @@ export const tokenLoader = selectorFamily({
       const wallet = get(currentWallet)
       const web3 = get(networkProvider)
       const bal = await web3.eth.getBalance(wallet.address)
-      console.log('got balance')
-      console.log(bal)
       return {...token, balance: bal};
     }
     const balance = await loadSingle(network, token, address);
