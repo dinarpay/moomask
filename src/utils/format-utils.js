@@ -3,7 +3,7 @@ export function formatAmount(amount, precision) {
 }
 
 export function precisionFormat(precision) {
-  return function(amount) {
+  return function(amount, afterDecimal = 2) {
     if(isNaN(amount)) {
       return 0;
     }
@@ -12,8 +12,8 @@ export function precisionFormat(precision) {
     let dotPlace = amt.indexOf('.');
     if(dotPlace !== -1) {
       let fraction = amt.substring(dotPlace + 1);
-      if(fraction.length > 2) {
-        fraction = fraction.substring(0, 2);
+      if(fraction.length > afterDecimal) {
+        fraction = fraction.substring(0, afterDecimal);
       } else if(fraction.length === 1) {
         fraction = fraction + '0';
       }

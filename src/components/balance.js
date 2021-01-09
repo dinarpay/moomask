@@ -1,5 +1,5 @@
 import React from 'react'
-import { Card, CardContent, Typography, CardActionArea, Box, IconButton } from '@material-ui/core'
+import { Card, CardContent, Typography, IconButton } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles';
 import { useRecoilValue } from 'recoil';
 import Clipboard from 'react-clipboard.js';
@@ -8,7 +8,6 @@ import { currentWallet, currentBalanceFormatted } from '../store/atoms';
 
 import { DEFAULT_TOKEN } from '../config/tokens';
 import { FileCopyOutlined } from '@material-ui/icons';
-
 
 
 const useStyles = makeStyles((theme) => ({

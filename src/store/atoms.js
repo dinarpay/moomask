@@ -98,6 +98,30 @@ const loadUrl = async ( url ) => {
   }
 };
 
+const mergeResults = (a, b) => {
+  let merged = [];
+  
+  let i = 0, j = 0;
+
+  while (i < a.length && j < b.length) {
+    const at = parseInt(a[i].timeStamp);
+    const bt = parseInt(b[j].timeStamp);
+    if ((at - bt) > 0) {
+        merged.push(b[j++]);
+    } else {
+        merged.push(a[i++]);
+    }
+  }
+
+  if (j < b.length) {
+      merged = merged.concat(b.slice(j));
+  } else {
+      merged = merged.concat(a.slice(i));
+  }
+
+  return merged.reverse();
+}
+
 export const networkTransactions = selectorFamily({
   key: 'networkTransactions',
   get: (fromBlock) => async ({get}) => {
@@ -108,10 +132,32 @@ export const networkTransactions = selectorFamily({
 
     const fetchUrl = `${network.scan}?module=account&action=txlist&address=${wallet.address}&startblock=${startBlock}&endblock=99999999&apikey=${network.apiKey}`;
 
-    const resp = await loadUrl(fetchUrl);
-    if(resp.message === 'OK') {
-      return resp.result.reverse();
+    const twentyUrl = `${network.scan}?module=account&action=tokentx&address=${wallet.address}&startblock=${startBlock}&endblock=99999999&apikey=${network.apiKey}`
+
+    const [main, peggy] = await Promise.allSettled([loadUrl(fetchUrl), loadUrl(twentyUrl)])
+    if(main && peggy && main.status && peggy.status) {
+      if(main.status === "fulfilled" && peggy.status === "fulfilled") {
+        const {value: mvalue} = main;
+        const {value: pvalue} = peggy;
+
+        if(mvalue.status === '1' && pvalue.status === '1') {
+          const mr = mergeResults(mvalue.result, pvalue.result);
+          console.log(mr);
+          return mr;
+        }
+      } else if(main.status === "fulfilled") {
+        const {value: mvalue} = main;
+        if(mvalue.status === '1') {
+          return mvalue.result.reverse();
+        }
+      } else if(peggy.status === "fulfilled") {
+        const {value: pvalue} = peggy;
+        if(pvalue.status === '1') {
+          return pvalue.result.reverse();
+        }
+      }
     }
+
     return [];
   }
 });

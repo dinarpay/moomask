@@ -1,36 +1,91 @@
 import React from 'react';
 
-import { networkTransactions } from '../store/atoms'
+import { currentNetwork, currentWallet, networkTransactions } from '../store/atoms'
 import {  useRecoilValue } from 'recoil';
 
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
+import {ButtonBase} from '@material-ui/core';
 
 import { FixedSizeList } from 'react-window';
+import { ArrowDownward, ArrowUpward } from '@material-ui/icons';
+import { Typography } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
+import ALL_TOKENS, { DEFAULT_TOKEN } from '../config/tokens'
+import { precisionFormat, formatDateFromSeconds} from '../utils/format-utils';
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    width:'100%',
+    height:'100%'
+  },
+  listItem: {
+    width:'100%',
+    display:'flex'
+  },
+  icon: {
+    justifyContent: 'center',
+    fontWeight: 'bold',
+    width: '10%',
+  },
+  moneyGone: {
+    color: 'red'
+  },
+  moneyAdd: {
+    color: 'green'
+  },
+  contentArea: {
+    width:'90%',
+    display: 'grid',
+    gridTemplateColumns: 'repeat(2, 1fr)'
+  }
+}));
+
 
 export default function Transactions() {
 
+  const classes = useStyles( );
+
+  const wallet = useRecoilValue(currentWallet);
+  const network = useRecoilValue(currentNetwork);
   const transactions = useRecoilValue(networkTransactions(0));
 
-  const precision = 18;
-  const precisionDiv = Math.pow(10, precision);
-
-  const formatBal = (amount) => {
-    return amount / precisionDiv;
-  }
-
   const formatDate = (dt) => {
-    return new Date(dt * 1000).toLocaleString();
+    return new Date(dt * 1000).toUTCString();
   }
+
+  const ALL_TOKENS_MAP = React.useMemo(() => {
+    let mp = {};
+    ALL_TOKENS.forEach((item) => {
+      let {contract} = item;
+      if(contract && contract[network.id]) {
+        mp[contract[network.id].toUpperCase()] = item;
+      }
+    });
+    return mp;
+  }, [ALL_TOKENS, network])
 
   const renderRow = (props) => {
     const { index, style } = props;
     const di = transactions[index];
+    const isSend = wallet.address.toUpperCase() == di.from.toUpperCase();
+
+    const tokenValue = di.contractAddress && ALL_TOKENS_MAP[di.contractAddress.toUpperCase()] ? ALL_TOKENS_MAP[di.contractAddress.toUpperCase()] : DEFAULT_TOKEN;
+
     return (
-      <ListItem style={style} key={index} disableGutters className="trans-list">
-        <ListItemText primary={`${formatBal(di.value)} BNB`} secondary={formatDate(di.timeStamp)} />
-        <svg className="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M10 0a10 10 0 1 1 0 20 10 10 0 0 1 0-20zM2 10a8 8 0 1 0 16 0 8 8 0 0 0-16 0zm10.54.7L9 14.25l-1.41-1.41L10.4 10 7.6 7.17 9 5.76 13.24 10l-.7.7z"/></svg>
-      </ListItem>
+        <div style={style} key={index} >
+          <ButtonBase className={classes.root}>
+            <div className={classes.listItem}>
+              <div className={classes.icon}>
+                {isSend ? <ArrowUpward className={classes.moneyGone} /> : <ArrowDownward className={classes.moneyAdd} />}
+              </div>
+            <div className={classes.contentArea}>
+              <Typography component="body1">{isSend ? 'Sent' : 'Received'}</Typography>
+              <span className={classes.amount}>{ precisionFormat(tokenValue.decimals)(di.value, 4) } {tokenValue.code}</span>
+              <Typography component="caption">{ formatDateFromSeconds(di.timeStamp) }</Typography>
+
+            </div>
+            </div>
+          </ButtonBase>
+        </div>
     );
   }
   
