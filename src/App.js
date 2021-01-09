@@ -8,6 +8,7 @@ import Home from './pages/home'
 import AboutUs from './pages/about-us'
 import Send from './pages/send'
 import Receive from './pages/receive'
+import TransactionDetail from './pages/transaction-details';
 
 import { useRecoilState } from 'recoil';
 import { currentWallet } from './store/atoms';
@@ -74,6 +75,8 @@ function App() {
               </Route>
               <Route path="/receive">
                 <Receive />
+              </Route>
+              <Route path="/transaction/:hash" component={TransactionDetail}>
               </Route>
               <Route exact path="/">
                 { loggedIn ? <Home /> : <Signin />}

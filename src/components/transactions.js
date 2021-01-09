@@ -11,10 +11,13 @@ import { makeStyles } from '@material-ui/core/styles';
 import ALL_TOKENS, { DEFAULT_TOKEN } from '../config/tokens'
 import { precisionFormat, formatDateFromSeconds, compressAddress} from '../utils/format-utils';
 
+import { useHistory } from 'react-router-dom';
+
 const useStyles = makeStyles((theme) => ({
   root: {
     width:'100%',
-    height:'100%'
+    height:'100%',
+    borderBottom: '1px solid #e1e1e1'
   },
   listItem: {
     width:'100%',
@@ -72,6 +75,8 @@ export default function Transactions() {
   const network = useRecoilValue(currentNetwork);
   const transactions = useRecoilValue(networkTransactions(0));
 
+  const history = useHistory();
+
   const ALL_TOKENS_MAP = React.useMemo(() => {
     let mp = {};
     ALL_TOKENS.forEach((item) => {
@@ -92,7 +97,9 @@ export default function Transactions() {
 
     return (
         <div style={style} key={index} >
-          <ButtonBase className={classes.root}>
+          <ButtonBase className={classes.root} onClick={() => {
+            history.push(`/transaction/${di.hash}`)
+          }}>
             <div className={classes.listItem}>
               <div className={classes.icon}>
                 {isSend ? <ArrowUpward className={classes.moneyGone} /> : <ArrowDownward className={classes.moneyAdd} />}

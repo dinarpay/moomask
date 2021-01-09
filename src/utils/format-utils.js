@@ -25,12 +25,15 @@ export function precisionFormat(precision) {
 }
 
 export function formatDateFromSeconds(dt) {
+  if(typeof dt === 'string') {
+    dt = parseInt(dt)
+  }
   const dat = new Date(dt * 1000);
-  return dat.toLocaleString();
+  return dat.toUTCString();
 }
 
 export function compressAddress(address) {
-  let len = address.length;
+  let len = address ? address.length : 0;
   if(len > 11) {
     let first = address.substring(0, 6);
     let last = address.substring(len - 6);

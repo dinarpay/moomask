@@ -50,9 +50,9 @@ export default function TokenList() {
           <a href="https://testnet.binance.org/faucet-smart" target="_blank" rel="noreferrer">Click here</a>
         </strong> to get some tokens
       </Alert>}
-    <FixedSizeList height={500} width={'100%'} itemSize={70} itemCount={list.length}>
-      {renderRow}
-    </FixedSizeList>
+      <FixedSizeList height={400} width={'100%'} itemSize={70} itemCount={list.length}>
+        {renderRow}
+      </FixedSizeList>
   </>
   )  
 }

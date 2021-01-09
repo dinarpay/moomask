@@ -29,11 +29,11 @@ const useStyles = makeStyles((theme) => ({
     }
   },
   clipboard: {
-    width: theme.spacing(2.5),
-    height:theme.spacing(2.5),
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center'
+    marginLeft: theme.spacing(1),
+    '& svg': {
+      width: theme.spacing(2.5),
+      height:theme.spacing(2.5),
+    }
   }
 }));
 
@@ -53,11 +53,11 @@ export default function Balance({children}) {
         <Typography variant="caption" >ADDRESS</Typography>
         <div className={classes.addressCopy}>
           <Typography variant="subtitle2" color="primary" className={classes.longText} >{wallet.address}</Typography>
-          <IconButton className={classes.copyButton}>
-            <Clipboard component="span" className={classes.clipboard} button-href="#" data-clipboard-text={wallet.address}>
-              <FileCopyOutlined color="secondary"  />
-            </Clipboard>
-          </IconButton>
+          
+          <Clipboard component="span" className={classes.clipboard} button-href="#" data-clipboard-text={wallet.address}>
+            <FileCopyOutlined color="secondary"  />
+          </Clipboard>
+          
         </div>
       </CardContent>
       {children}

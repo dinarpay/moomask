@@ -208,3 +208,23 @@ export const tokenLoader = selectorFamily({
     return {...token, balance};
   }
 })
+
+
+export const transactionDetails = selectorFamily({
+  key: 'transactionDetails',
+  get: ({hash}) => async ({get}) => {
+    try {
+      const allTokens = await get(networkTransactions(0));
+      for(let i = 0; i < allTokens.length; i++) {
+        let single = allTokens[i];
+        if(single.hash === hash) {
+          console.log(single);
+          return single;
+        }
+      }
+    } catch(e) {
+      console.error(e);
+    }
+    return {};
+  }
+})
