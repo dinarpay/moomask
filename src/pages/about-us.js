@@ -16,6 +16,14 @@ const useStyles = makeStyles((theme) => ({
   },
   bottomSpace: {
     marginBottom: theme.spacing(2)
+  },
+  spacer: {
+    flex: '1'
+  },
+  partners: {
+    '& img': {
+      maxWidth: theme.spacing(40)
+    }
   }
 
 }));
@@ -33,14 +41,14 @@ export default function AboutUs() {
         <Typography className={classes.bottomSpace}>MooMask is a browser extension wallet for Binance Smart Chain. MooMask enables you to access BSC Blockchain directly from your favorite browser.</Typography>
 
         <Typography className={classes.bottomSpace}>We never hold / have access to your private key. The private key is encrypted and only stored on your browser. For safety, always logout your wallet after using it.</Typography>
-
+        <div className={classes.spacer}></div>
         <Typography variant="h5" className={classes.bottomSpace}>Partner</Typography>
 
-        <div className="partners">
+        <div className={classes.partners}>
           <img src="images/moopay.png" alt="MooPay" />
         </div>
 
-        <Typography variant="caption" display="block" align="center" >v0.0.1</Typography>
+        <Typography variant="caption" display="block" >v0.0.4</Typography>
       </Container>
     </>
   )
