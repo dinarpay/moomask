@@ -28,3 +28,13 @@ export function formatDateFromSeconds(dt) {
   const dat = new Date(dt * 1000);
   return dat.toLocaleString();
 }
+
+export function compressAddress(address) {
+  let len = address.length;
+  if(len > 11) {
+    let first = address.substring(0, 6);
+    let last = address.substring(len - 6);
+    return first + '...' + last;
+  }
+  return address;
+}

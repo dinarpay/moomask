@@ -142,7 +142,6 @@ export const networkTransactions = selectorFamily({
 
         if(mvalue.status === '1' && pvalue.status === '1') {
           const mr = mergeResults(mvalue.result, pvalue.result);
-          console.log(mr);
           return mr;
         }
       } else if(main.status === "fulfilled") {

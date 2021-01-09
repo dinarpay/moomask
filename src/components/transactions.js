@@ -7,10 +7,9 @@ import {ButtonBase} from '@material-ui/core';
 
 import { FixedSizeList } from 'react-window';
 import { ArrowDownward, ArrowUpward } from '@material-ui/icons';
-import { Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import ALL_TOKENS, { DEFAULT_TOKEN } from '../config/tokens'
-import { precisionFormat, formatDateFromSeconds} from '../utils/format-utils';
+import { precisionFormat, formatDateFromSeconds, compressAddress} from '../utils/format-utils';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -36,6 +35,31 @@ const useStyles = makeStyles((theme) => ({
     width:'90%',
     display: 'grid',
     gridTemplateColumns: 'repeat(2, 1fr)'
+  },
+  label: {
+    fontSize: '1rem',
+    textAlign: 'left'
+  },
+  amount: {
+    fontSize: '1rem',
+    textAlign: 'right',
+    color: '#333',
+    padding: '0 15px',
+  },
+  stamp: {
+    fontSize: '.75rem',
+    textAlign: 'left',
+    marginTop: '.3rem',
+    color: '#999'
+  },
+  address: {
+    marginTop: '.3rem',
+    fontSize: '.75rem',
+    textAlign: 'right',
+    padding:'0 15px',
+    display: 'flex',
+    flexDirection: 'column',
+    color: '#999'
   }
 }));
 
@@ -48,10 +72,6 @@ export default function Transactions() {
   const network = useRecoilValue(currentNetwork);
   const transactions = useRecoilValue(networkTransactions(0));
 
-  const formatDate = (dt) => {
-    return new Date(dt * 1000).toUTCString();
-  }
-
   const ALL_TOKENS_MAP = React.useMemo(() => {
     let mp = {};
     ALL_TOKENS.forEach((item) => {
@@ -61,12 +81,12 @@ export default function Transactions() {
       }
     });
     return mp;
-  }, [ALL_TOKENS, network])
+  }, [network])
 
   const renderRow = (props) => {
     const { index, style } = props;
     const di = transactions[index];
-    const isSend = wallet.address.toUpperCase() == di.from.toUpperCase();
+    const isSend = wallet.address.toUpperCase() === di.from.toUpperCase();
 
     const tokenValue = di.contractAddress && ALL_TOKENS_MAP[di.contractAddress.toUpperCase()] ? ALL_TOKENS_MAP[di.contractAddress.toUpperCase()] : DEFAULT_TOKEN;
 
@@ -78,10 +98,13 @@ export default function Transactions() {
                 {isSend ? <ArrowUpward className={classes.moneyGone} /> : <ArrowDownward className={classes.moneyAdd} />}
               </div>
             <div className={classes.contentArea}>
-              <Typography component="body1">{isSend ? 'Sent' : 'Received'}</Typography>
-              <span className={classes.amount}>{ precisionFormat(tokenValue.decimals)(di.value, 4) } {tokenValue.code}</span>
-              <Typography component="caption">{ formatDateFromSeconds(di.timeStamp) }</Typography>
-
+              <div className={classes.label}>{isSend ? 'Sent' : 'Received'}</div>
+              <div className={classes.amount}>{ precisionFormat(tokenValue.decimals)(di.value, 4) } {tokenValue.code}</div>
+              <div className={classes.stamp}>{ formatDateFromSeconds(di.timeStamp) }</div>
+              <div className={classes.address}>
+                <span>From: {compressAddress(di.from)}</span>
+                <span>To: {compressAddress(di.to)}</span>
+              </div>
             </div>
             </div>
           </ButtonBase>
