@@ -2,8 +2,6 @@ import React from 'react'
 
 import { useHistory } from 'react-router-dom'
 
-import { NavLink } from 'react-router-dom'
-
 import {Button, Box, TextField, FormControl, FormHelperText} from '@material-ui/core';
 import {Alert} from '@material-ui/lab'
 
@@ -131,7 +129,7 @@ export default function CreateWallet() {
       <Header loggedIn={false} />
       <Box className={classes.root}>
         <div className="auth-logo">
-          <img src="images/bscpay.png" alt="MooMask" />
+          <img src="images/moopay-logo.png" alt="MooMask" />
         </div>
 
         <h1 className="auth-title">MOOMASK</h1>

@@ -71,7 +71,7 @@ export default function Signin() {
       <Header loggedIn={false} />
       <Box className={classes.root}>
         <div className="auth-logo">
-          <img src="images/bscpay.png" alt="MooMask" />
+          <img src="images/moopay-logo.png" alt="MooMask" />
         </div>
 
         <h1 className="auth-title">MOOMASK</h1>

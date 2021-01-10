@@ -50,8 +50,6 @@ function App() {
   const [loggedIn, setLoggedIn] = React.useState(false);
 
   React.useEffect(() => {
-    console.log('wallet ');
-    console.log(walletAtom);
     if(walletAtom && walletAtom.address && walletAtom.password && walletAtom.keystore) {
       setLoggedIn(true);
     }else {
