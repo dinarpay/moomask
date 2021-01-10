@@ -72,7 +72,6 @@ const useStyles = makeStyles((theme) => ({
         width: '15px'
       }
     }
-
   }
 
 }));
@@ -111,7 +110,7 @@ export default function CreateWallet() {
 
   const copyConfirmed = (event) => {
     event.preventDefault();
-    const keystore = encryptKeyStore(pass, wallet.privateKey, wallet.address);
+    const keystore = encryptKeyStore(provider,  wallet.privateKey, pass);
 
     setWalletAtom({
       address: wallet.address,

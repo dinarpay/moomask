@@ -1,5 +1,5 @@
 import React from 'react'
-import { Card, CardContent, Typography, IconButton } from '@material-ui/core'
+import { Card, CardContent, Typography } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles';
 import { useRecoilValue } from 'recoil';
 import Clipboard from 'react-clipboard.js';

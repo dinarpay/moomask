@@ -1,11 +1,13 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom'
 
-import {Button, Box, TextField} from '@material-ui/core';
+import {Button, Box, TextField, FormControl, FormHelperText} from '@material-ui/core';
 
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Header from '../components/header';
-
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { networkProvider, currentWallet } from '../store/atoms';
+import { decryptKeyStore } from '../utils/keystore';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -34,11 +36,33 @@ const useStyles = makeStyles((theme) => ({
 export default function Signin() {
 
   const classes = useStyles( useTheme() );
+  const [pass, setPass] = React.useState('');
+  const [error, setError] = React.useState(false);
+  const [helperText, setHelperText] = React.useState('');
+
+  const [wallet, setWallet] = useRecoilState(currentWallet);
+  const provider = useRecoilValue(networkProvider)
 
   const history = useHistory();
 
   const handleSubmit = (event) => {
     event.preventDefault();
+    if(!wallet || !wallet.keystore) {
+      setHelperText('No wallet found');
+      setError(true);
+    }
+
+    try {
+      decryptKeyStore(provider, wallet.keystore, pass);
+      setWallet(wallet => {
+        return {...wallet, password: pass};
+      });
+    } catch(e) {
+      console.error(e);
+      setHelperText('Unable to unlock valid, please try again');
+      setError(true);
+    }
+
     return false;
   }
 
@@ -54,8 +78,13 @@ export default function Signin() {
 
         <div className="message error"></div>
         <form method="post" autoComplete="off" onSubmit={handleSubmit} className={classes.form}>
-        
-          <TextField className={classes.fieldPassword} id="password" aria-describedby="password_helper" type="password" placeholder="Password"/>
+
+          <FormControl className={classes.fieldPassword} error={error}>
+            <TextField value={pass} onChange={(event) => { setPass(event.target.value); }} className={classes.fieldPassword} id="password" aria-describedby="password_helper" type="password" placeholder="Password"/>
+            <FormHelperText>
+              {helperText}
+            </FormHelperText>
+          </FormControl>
             
           <Button variant="contained" color="primary" type="submit" className={classes.formButton}>SignIn</Button>
           <div className="line-through">

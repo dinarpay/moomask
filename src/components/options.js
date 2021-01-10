@@ -7,7 +7,7 @@ import Refresh from '@material-ui/icons/Refresh';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import { useHistory } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
-import { refreshCalled } from '../store/atoms';
+import { currentWallet, refreshCalled } from '../store/atoms';
 
 const useStyles = makeStyles((theme) => ({
   refreshBtn: {
@@ -37,8 +37,8 @@ export default function Options({loggedIn}) {
   const classes = useStyles(useTheme());
 
   const [refresh, setRefresh] = useRecoilState(refreshCalled);
-
   const [anchorEl, setAnchorEl] = React.useState(null);
+  const [,setWalletAtom] = useRecoilState(currentWallet);
   const open = Boolean(anchorEl);
 
   const handleClick = (event) => {
@@ -57,19 +57,30 @@ export default function Options({loggedIn}) {
   const handleMenuItemClick = (event, {id}) => {
     switch(id) {
       case KEY_SEND:
+        history.push('/send');
         break;
       case KEY_RECEIVE:
+        history.push('/receive');
         break;
       case KEY_EXPORT:
+        history.push('/export-key');
         break;
       case KEY_ABOUT_US:
         history.push('/about-us')
         break;
       case KEY_LOGOUT:
+        doLogout();
         break;
       default:
     }
     setAnchorEl(null);
+  }
+
+  const doLogout = () => {
+    setWalletAtom(atom => {
+      const {password, ...rest} = atom;
+      return rest;
+    });
   }
 
   return (

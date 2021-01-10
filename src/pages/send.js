@@ -104,7 +104,8 @@ export default function Send() {
     } else {
       try {
         setFormSubmitting(true)
-        const unlocked = decryptKeyStore(wallet.password, wallet.keystore)
+        const unlocked = decryptKeyStore(provider, wallet.keystore, wallet.password)
+
         if(!unlocked) {
           // show message
           return false;

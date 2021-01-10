@@ -84,7 +84,7 @@ export default function ImportWallet() {
     if(!hasError) {
       try {
         const account = web3.eth.accounts.privateKeyToAccount(key);
-        const keystore = encryptKeyStore(pass, key, account.address);
+        const keystore = encryptKeyStore(web3, key, pass);
         setWalletAtom({
           address: account.address,
           password: pass,

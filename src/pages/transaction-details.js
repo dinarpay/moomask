@@ -86,7 +86,7 @@ function ActualDetails({hash, tokensMap, network}) {
   const di = useRecoilValue(transactionDetails({hash}));
   const tokenValue = di.contractAddress && tokensMap[di.contractAddress.toUpperCase()] ? tokensMap[di.contractAddress.toUpperCase()] : DEFAULT_TOKEN;
 
-  const success = di.isError == "0" ? true : false;
+  const success = di.isError === "0" ? true : false;
   
   return (<>
     <div className={classes.toparea}>
@@ -139,7 +139,7 @@ export default function TransactionDetail({match}) {
   return (
     <>
       <Header loggedIn={true}>
-        <BackButtonHeader title="All Transactions" />
+        <BackButtonHeader title="Transaction" />
       </Header>
       <Container className={classes.root}>
         <React.Suspense fallback={<div>Loading...</div>}>

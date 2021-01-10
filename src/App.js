@@ -9,6 +9,7 @@ import AboutUs from './pages/about-us'
 import Send from './pages/send'
 import Receive from './pages/receive'
 import TransactionDetail from './pages/transaction-details';
+import ExportKey from './pages/export-key';
 
 import { useRecoilState } from 'recoil';
 import { currentWallet } from './store/atoms';
@@ -49,8 +50,10 @@ function App() {
   const [loggedIn, setLoggedIn] = React.useState(false);
 
   React.useEffect(() => {
-    if(walletAtom && walletAtom.address) {
+    if(walletAtom && walletAtom.address && walletAtom.password) {
       setLoggedIn(true);
+    }else {
+      setLoggedIn(false);
     }
   }, [walletAtom]);
 
@@ -75,6 +78,9 @@ function App() {
               </Route>
               <Route path="/receive">
                 <Receive />
+              </Route>
+              <Route path="/export-key">
+                <ExportKey />
               </Route>
               <Route path="/transaction/:hash" component={TransactionDetail}>
               </Route>
