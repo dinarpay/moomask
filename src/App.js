@@ -50,7 +50,9 @@ function App() {
   const [loggedIn, setLoggedIn] = React.useState(false);
 
   React.useEffect(() => {
-    if(walletAtom && walletAtom.address && walletAtom.password) {
+    console.log('wallet ');
+    console.log(walletAtom);
+    if(walletAtom && walletAtom.address && walletAtom.password && walletAtom.keystore) {
       setLoggedIn(true);
     }else {
       setLoggedIn(false);
@@ -65,7 +67,7 @@ function App() {
                 <CreateWallet />
               </Route>
               <Route path="/import-wallet">
-                <ImportWallet />
+              { loggedIn ? <Home /> : <ImportWallet /> }
               </Route>
               <Route path="/signin">
                 <Signin />

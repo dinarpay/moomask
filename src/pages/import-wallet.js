@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { NavLink } from 'react-router-dom'
+import { NavLink, useHistory } from 'react-router-dom'
 
 import {Button, Box, TextField, FormControl, FormHelperText } from '@material-ui/core';
 
@@ -25,6 +25,9 @@ const useStyles = makeStyles((theme) => ({
   form: {
     display: 'flex',
     flexDirection: 'column'
+  },
+  fullWidth: {
+    width:'100%'
   },
   fieldPassword: {
     marginBottom: theme.spacing(2)
@@ -59,6 +62,8 @@ export default function ImportWallet() {
   const [helperText, setHelperText] = React.useState(helperTextString)
 
   const [helperKeyText, setHelperKeyText] = React.useState('');
+
+  const history = useHistory();
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -125,7 +130,7 @@ export default function ImportWallet() {
           </FormControl>
           <Button variant="contained" color="primary" type="submit" className={classes.formButton}>Import private key</Button>
         </form>
-        <NavLink to="/" className={classes.links} >Cancel</NavLink>
+        <Button onClick={() => { history.push('/'); }} variant="contained" className={classes.fullWidth}>Cancel</Button>
 
       </Box>
     </>

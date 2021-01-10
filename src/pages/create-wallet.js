@@ -37,6 +37,9 @@ const useStyles = makeStyles((theme) => ({
   formButton: {
     marginBottom: theme.spacing(2)
   },
+  fullWidth: {
+    width:'100%'
+  },
   links: {
     width:'100%',
     display: 'block',
@@ -145,7 +148,7 @@ export default function CreateWallet() {
               </FormControl>
               <Button variant="contained" color="primary" type="submit" className={classes.formButton}>Create new wallet</Button>
             </form>
-            <NavLink to="/" className={classes.links} >Cancel</NavLink>
+            <Button onClick={() => { history.push('/'); }} variant="contained" className={classes.fullWidth}>Cancel</Button>
           </>
         }
 
