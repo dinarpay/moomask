@@ -227,4 +227,9 @@ export const transactionDetails = selectorFamily({
     }
     return {};
   }
-})
+});
+
+export const homeSelectedTab = atom({
+  key: 'homeSelectedTab',
+  default: 0
+});

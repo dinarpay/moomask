@@ -13,8 +13,8 @@ import CardActions from '@material-ui/core/CardActions';
 import Transactions from '../components/transactions';
 import TokenList from '../components/token-list';
 import { useHistory } from 'react-router-dom';
-import { useRecoilValue } from 'recoil';
-import { selectedNetworkId } from '../store/atoms';
+import { useRecoilValue, useRecoilState } from 'recoil';
+import { selectedNetworkId, homeSelectedTab } from '../store/atoms';
 import MuiAlert from '@material-ui/lab/Alert';
 
 function Alert(props) {
@@ -48,8 +48,6 @@ function a11yProps(index) {
   };
 }
 
-
-
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
@@ -63,7 +61,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Home() {
   const classes = useStyles( useTheme() );
-  const [value, setValue] = React.useState(0);
+  const [value, setValue] = useRecoilState( homeSelectedTab );
 
   const history = useHistory();
 

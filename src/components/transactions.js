@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { currentNetwork, currentWallet, networkTransactions } from '../store/atoms'
-import {  useRecoilValue } from 'recoil';
+import {  useRecoilValue, useRecoilValueLoadable } from 'recoil';
 
 import {ButtonBase} from '@material-ui/core';
 
@@ -13,7 +13,7 @@ import { precisionFormat, formatDateFromSeconds, compressAddress} from '../utils
 
 import { useHistory } from 'react-router-dom';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   root: {
     width:'100%',
     height:'100%',
@@ -67,13 +67,13 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-export default function Transactions() {
+export function AllTransactions() {
 
   const classes = useStyles( );
 
   const wallet = useRecoilValue(currentWallet);
   const network = useRecoilValue(currentNetwork);
-  const transactions = useRecoilValue(networkTransactions(0));
+  const transactions = useRecoilValueLoadable(networkTransactions(0));
 
   const history = useHistory();
 
@@ -120,8 +120,16 @@ export default function Transactions() {
   }
   
   return (
-    <FixedSizeList height={500} width={'100%'} itemSize={70} itemCount={transactions.length}>
+    <FixedSizeList height={600} width={'100%'} itemSize={70} itemCount={transactions.length}>
       {renderRow}
     </FixedSizeList>
+  )
+}
+
+export default function Transactions() {
+  return (
+    <React.Suspense fallback={<div className="loading">Loading Transactions..</div>}>
+      <AllTransactions />
+    </React.Suspense>
   )
 }
