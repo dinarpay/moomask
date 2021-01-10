@@ -27,11 +27,12 @@ MooMask is a browser extension wallet for Binance SmartChain.  For safety, alway
   ```
 * Run the project :
   ```
-  npm run start
+  npm run dist
   ```
-* Uncompressed build can be found in `/dist` folder.
+* Compressed build can be found in `/dist` folder.
+* Uncompress the zip file.
 * Go to Chrome Extensions page and activate the Developer Mode.
-* Click `Load Unpacked` button and point it to `/dist` folder.
+* Click `Load Unpacked` button and point it to `/dist/moomask` folder.
 
 ## Development
 * Install [node.js](https://nodejs.org/) and npm.

@@ -2,8 +2,8 @@ const fs = require('fs');
 const path = require('path');
 const archiver = require('archiver');
 
-const zipDirectory = path.join(__dirname ,'..', 'dist');
-const finalPath = path.join(zipDirectory, 'moomask.zip');
+const zipDirectory = path.join(__dirname ,'..');
+const finalPath = path.join(__dirname, '..', 'moomask.zip');
 
 const output = fs.createWriteStream( finalPath );
 const archive = archiver('zip', {
@@ -20,7 +20,6 @@ archive.on('error', function(err) {
 
 archive.pipe(output);
 
-//archive.glob('*.*', {cwd: zipDirectory});
-archive.directory(zipDirectory, false);
+archive.directory(zipDirectory + '/dist/', false);
 
 archive.finalize();
