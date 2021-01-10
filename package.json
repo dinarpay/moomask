@@ -1,7 +1,11 @@
 {
   "name": "moomask",
   "version": "0.0.5",
-  "private": true,
+  "description": "Binance Smart Chain Browser Extension Wallet",
+  "author": "Moopay.live",
+  "license": "Commercial",
+  "private": false,
+  "homepage": "https://moopay.live/",
   "dependencies": {
     "@material-ui/core": "4.11.2",
     "@material-ui/icons": "4.11.2",
