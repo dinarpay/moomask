@@ -32,7 +32,8 @@
     "start": "react-scripts start",
     "build": "./scripts/build.sh",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "dist": "npm run build && node scripts/zip.js"
   },
   "eslintConfig": {
     "extends": [
@@ -51,5 +52,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "archiver": "^5.2.0"
   }
 }
