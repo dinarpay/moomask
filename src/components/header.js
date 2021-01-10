@@ -35,7 +35,7 @@ export default function Header({loggedIn, children}) {
     <AppBar className={classes.root} color="default" position="static" elevation={eleVal}>
       <Toolbar className={classes.root}>
         { loggedIn && <Link href="/" to="/" className={classes.logo}>
-          <img src="images/bscpay-small.png" alt="MooMask" />
+          <img src="images/moopay-small.png" alt="MooMask" />
           <span>MOOMASK</span>
         </Link> }
         <NetworkSelector />
