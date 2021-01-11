@@ -32,11 +32,12 @@ export function formatDateFromSeconds(dt) {
   return dat.toUTCString();
 }
 
-export function compressAddress(address) {
+export function compressAddress(address, toLength = 14) {
   let len = address ? address.length : 0;
-  if(len > 11) {
-    let first = address.substring(0, 6);
-    let last = address.substring(len - 6);
+  if(len > toLength) {
+    const mid = Math.floor(toLength / 2);
+    let first = address.substring(0, mid);
+    let last = address.substring(len - mid);
     return first + '...' + last;
   }
   return address;

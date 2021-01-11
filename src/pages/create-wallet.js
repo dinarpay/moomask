@@ -14,7 +14,7 @@ import { encryptKeyStore } from '../utils/keystore';
 
 import { useRecoilState, useRecoilValue } from 'recoil';
 
-import { currentWallet, networkProvider } from '../store/atoms';
+import { allWallets, currentWallet, networkProvider } from '../store/atoms';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -83,7 +83,7 @@ const helperErrorString = 'Invalid Password, should be atleast 8 characters long
 export default function CreateWallet() {
   const classes = useStyles( useTheme() );
 
-  const [, setWalletAtom] = useRecoilState(currentWallet)
+  const [, setWalletAtom] = useRecoilState(allWallets)
 
   const provider = useRecoilValue(networkProvider)
 
@@ -113,12 +113,17 @@ export default function CreateWallet() {
     event.preventDefault();
     const keystore = encryptKeyStore(provider,  wallet.privateKey, pass);
 
-    setWalletAtom({
-      address: wallet.address,
-      password: pass,
-      keystore: keystore
+    setWalletAtom((current) => {
+      const all = [...current];
+      all.push({
+        address: wallet.address,
+        password: pass,
+        keystore: keystore,
+        current: true
+      })
+      return all;
     });
-
+    
     history.push('/');
 
     return false;

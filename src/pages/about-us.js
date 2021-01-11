@@ -25,7 +25,6 @@ const useStyles = makeStyles((theme) => ({
       maxWidth: theme.spacing(40)
     }
   }
-
 }));
 
 export default function AboutUs() {

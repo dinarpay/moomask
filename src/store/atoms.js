@@ -54,11 +54,26 @@ export const networkProvider = selector({
   }
 });
 
-export const currentWallet = atom({
+export const allWallets = atom({
+  key: 'allWallets',
+  default: [],
+  persistence_UNSTABLE: {
+    type: 'allWallets'
+  }
+});
+
+export const currentWallet = selector({
   key: 'currentWallet',
   default: null,
-  persistence_UNSTABLE: {
-    type: 'currentWallet'
+  get: ({get}) => {
+    const all = get(allWallets);
+    for(let i = 0; i < all.length; i++) {
+      const single = all[i];
+      if(single.current) {
+        return single;
+      }
+    }
+    return null;
   }
 });
 

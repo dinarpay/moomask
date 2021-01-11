@@ -11,7 +11,7 @@ import { encryptKeyStore } from '../utils/keystore';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import Header from '../components/header';
 
-import { currentWallet, networkProvider } from '../store/atoms';
+import { allWallets, currentWallet, networkProvider } from '../store/atoms';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -50,7 +50,7 @@ export default function ImportWallet() {
   
   const classes = useStyles( useTheme() );
 
-  const [, setWalletAtom] = useRecoilState(currentWallet)
+  const [, setWalletAtom] = useRecoilState(allWallets)
 
   const web3 = useRecoilValue(networkProvider)
 
@@ -90,11 +90,22 @@ export default function ImportWallet() {
       try {
         const account = web3.eth.accounts.privateKeyToAccount(key);
         const keystore = encryptKeyStore(web3, key, pass);
-        setWalletAtom({
-          address: account.address,
-          password: pass,
-          keystore: keystore
+
+        setWalletAtom((current) => {
+          const all = [...current];
+          for(let i = 0; i < all.length; i++) {
+            all[i].current = false;
+          }
+          const wal = {
+            address: account.address,
+            password: pass,
+            keystore: keystore,
+            current: true
+          };
+          all.push(wal);
+          return all;
         });
+
       } catch(error) {
         setHelperKeyText(error.message);
         setKeyError(true)

@@ -18,14 +18,14 @@ const useStyles = makeStyles((theme) => ({
 const KEY_SEND = 1;
 const KEY_RECEIVE = 2;
 const KEY_EXPORT = 3;
-const KEY_ABOUT_US = 4;
-const KEY_LOGOUT = 5;
+const KEY_SETTINGS = 4;
+const KEY_ABOUT_US = 5;
+const KEY_LOGOUT = 6;
 
 const options = [
   {id: KEY_SEND, name: 'Send'},
   {id: KEY_RECEIVE, name: 'Receive'},
-  {id: KEY_EXPORT, name: 'Export Private Key'},
-  {id: KEY_ABOUT_US, name: 'About MooMask'},
+  {id: KEY_SETTINGS, name: 'Settings'},
   {id: KEY_LOGOUT, name: 'Logout'}
 ];
 
@@ -61,6 +61,9 @@ export default function Options({loggedIn}) {
         break;
       case KEY_RECEIVE:
         history.push('/receive');
+        break;
+      case KEY_SETTINGS:
+        history.push('/settings');
         break;
       case KEY_EXPORT:
         history.push('/export-key');

@@ -21,6 +21,7 @@ import {
 } from "react-router-dom";
 
 import { ThemeProvider, createMuiTheme } from '@material-ui/core/styles';
+import Settings from './pages/settings';
 
 const theme = createMuiTheme({
   typography: {
@@ -75,6 +76,9 @@ function App() {
               </Route>
               <Route path="/send">
                 <Send />
+              </Route>
+              <Route path="/settings">
+                <Settings />
               </Route>
               <Route path="/receive">
                 <Receive />
