@@ -68,11 +68,11 @@ function InternalWalletDetail({address, index}) {
 
     let updatedWallet = {...walletDetails};
     let changed = false;
-    if(walletDetails.current != current) {
+    if(walletDetails.current !== current) {
       updatedWallet.current = current;
       changed = true;
     }
-    if(walletDetails.label != lbl) {
+    if(walletDetails.label !== lbl) {
       updatedWallet.label = lbl;
       changed = true;
     }
@@ -81,7 +81,7 @@ function InternalWalletDetail({address, index}) {
       setAllWal(wallets => {
         const all = [];
         for(let i = 0; i < wallets.length; i++) {
-          if(wallets[i].address == address) {
+          if(wallets[i].address === address) {
             all.push(updatedWallet);
           } else {
             if(current) {

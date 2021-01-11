@@ -5,10 +5,10 @@ import BackButtonHeader from '../components/back-button-header'
 import {  Button, Container } from '@material-ui/core'
 
 import { makeStyles } from '@material-ui/core/styles';
-import { currentNetwork, transactionDetails } from '../store/atoms';
+import { currentNetwork, transactionDetails, allTokens } from '../store/atoms';
 import { useRecoilValue } from 'recoil';
 
-import { DEFAULT_TOKEN, genTokenMap } from '../config/tokens'
+import { DEFAULT_TOKEN } from '../config/tokens'
 import { Avatar } from '@material-ui/core';
 import { precisionFormat, compressAddress, formatDateFromSeconds } from '../utils/format-utils';
 import { Check } from '@material-ui/icons';
@@ -134,7 +134,18 @@ export default function TransactionDetail({match}) {
 
   const network = useRecoilValue(currentNetwork);
   
-  const all_tokens_map = genTokenMap(network);
+  const allTokensData = useRecoilValue(allTokens);
+
+  const all_tokens_map = React.useMemo(() => {
+    let mp = {};
+    allTokensData.forEach((item) => {
+      let {contract} = item;
+      if(contract && contract[network.id]) {
+        mp[contract[network.id].toUpperCase()] = item;
+      }
+    });
+    return mp;
+  }, [network, allTokensData])
 
   return (
     <>

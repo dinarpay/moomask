@@ -11,6 +11,7 @@ import Receive from './pages/receive'
 import TransactionDetail from './pages/transaction-details';
 import WalletDetail from './pages/wallet-details';
 import ExportKey from './pages/export-key';
+import AddCustomToken from './pages/add-token';
 
 import { useRecoilState } from 'recoil';
 import { currentWallet } from './store/atoms';
@@ -86,6 +87,9 @@ function App() {
               </Route>
               <Route path="/export-key">
                 <ExportKey />
+              </Route>
+              <Route path="/add-token">
+                <AddCustomToken />
               </Route>
               <Route path="/transaction/:hash" component={TransactionDetail}>
               </Route>

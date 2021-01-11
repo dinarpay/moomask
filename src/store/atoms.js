@@ -88,7 +88,15 @@ export const walletWithAddress = selectorFamily({
     }
     return null;
   }
-})
+});
+
+export const allTokens = atom({
+  key: 'allTokens',
+  default: ALL_TOKENS,
+  persistence_UNSTABLE: {
+    type: 'allTokens'
+  }
+});
 
 export const currentBalance = selectorFamily({
   key: 'currentBalance',
@@ -189,6 +197,7 @@ export const networkTransactions = selectorFamily({
   }
 });
 
+
 export const tokenList = selector({
   key: 'tokenList',
   default: [],
@@ -196,8 +205,9 @@ export const tokenList = selector({
     get(refreshCalled);
     const network = get(currentNetwork);
     const wallet = get(currentWallet);
+    const tokens = get(allTokens);
     
-    let toUseTokens = ALL_TOKENS.filter( item => {
+    let toUseTokens = tokens.filter( item => {
       return item.code === BNB_CODE || (item.contract && item.contract[network.id]);
     });
 
@@ -242,9 +252,9 @@ export const transactionDetails = selectorFamily({
   key: 'transactionDetails',
   get: ({hash}) => async ({get}) => {
     try {
-      const allTokens = await get(networkTransactions(0));
-      for(let i = 0; i < allTokens.length; i++) {
-        let single = allTokens[i];
+      const allToks = await get(networkTransactions(0));
+      for(let i = 0; i < allToks.length; i++) {
+        let single = allToks[i];
         if(single.hash === hash) {
           console.log(single);
           return single;

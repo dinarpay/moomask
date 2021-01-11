@@ -1,14 +1,14 @@
 import React from 'react';
 
-import { currentNetwork, currentWallet, networkTransactions } from '../store/atoms'
-import {  useRecoilValue, useRecoilValueLoadable } from 'recoil';
+import { currentNetwork, currentWallet, networkTransactions, allTokens } from '../store/atoms'
+import { useRecoilValue, useRecoilValueLoadable } from 'recoil';
 
 import {ButtonBase} from '@material-ui/core';
 
 import { FixedSizeList } from 'react-window';
 import { ArrowDownward, ArrowUpward } from '@material-ui/icons';
 import { makeStyles } from '@material-ui/core/styles';
-import ALL_TOKENS, { DEFAULT_TOKEN } from '../config/tokens'
+import { DEFAULT_TOKEN } from '../config/tokens'
 import { precisionFormat, formatDateFromSeconds, compressAddress} from '../utils/format-utils';
 
 import { useHistory } from 'react-router-dom';
@@ -75,18 +75,20 @@ export function AllTransactions() {
   const network = useRecoilValue(currentNetwork);
   const transactions = useRecoilValueLoadable(networkTransactions(0));
 
+  const allTokensData = useRecoilValue(allTokens);
+
   const history = useHistory();
 
   const ALL_TOKENS_MAP = React.useMemo(() => {
     let mp = {};
-    ALL_TOKENS.forEach((item) => {
+    allTokensData.forEach((item) => {
       let {contract} = item;
       if(contract && contract[network.id]) {
         mp[contract[network.id].toUpperCase()] = item;
       }
     });
     return mp;
-  }, [network])
+  }, [network, allTokensData])
 
   const renderRow = (props) => {
     const { index, style } = props;

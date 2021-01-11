@@ -14,7 +14,7 @@ import { encryptKeyStore } from '../utils/keystore';
 
 import { useRecoilState, useRecoilValue } from 'recoil';
 
-import { allWallets, currentWallet, networkProvider } from '../store/atoms';
+import { allWallets, networkProvider } from '../store/atoms';
 
 const useStyles = makeStyles((theme) => ({
   root: {

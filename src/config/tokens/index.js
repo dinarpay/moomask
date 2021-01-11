@@ -16,15 +16,3 @@ export const BNB_CODE = 'BNB';
 export const DEFAULT_TOKEN = BNB;
 
 export default ALL_TOKENS;
-
-export const genTokenMap = (network) => {
-  const mp = {}
-  ALL_TOKENS.forEach((item) => {
-    let {contract} = item;
-    if(contract && contract[network.id]) {
-      mp[contract[network.id].toUpperCase()] = item;
-    }
-  });
-  return mp;
-}
-

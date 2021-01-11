@@ -8,7 +8,7 @@ import { useHistory } from 'react-router-dom'
 import { allWallets, networkProvider } from '../store/atoms';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { compressAddress } from '../utils/format-utils'
-import { Check, OpenInNew } from '@material-ui/icons';
+import { Check } from '@material-ui/icons';
 import { encryptKeyStore } from '../utils/keystore';
 
 const useStyles = makeStyles((theme) => ({
@@ -102,6 +102,9 @@ export default function Settings() {
         </CardActions>
       </Card>
       <List >
+        <ListItem button onClick={() => historyPush('add-token')}>
+          <ListItemText primary="Add custom token"></ListItemText>
+        </ListItem>
         <ListItem button onClick={() => historyPush('export-key')}>
           <ListItemText primary="Export Key"></ListItemText>
         </ListItem>

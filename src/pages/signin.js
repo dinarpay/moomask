@@ -40,7 +40,7 @@ export default function Signin() {
   const [error, setError] = React.useState(false);
   const [helperText, setHelperText] = React.useState('');
 
-  const [wallet, setWallet] = useRecoilState(currentWallet);
+  const wallet = useRecoilValue(currentWallet);
   const [,setAllWallets] = useRecoilState(allWallets);
   const provider = useRecoilValue(networkProvider)
 
