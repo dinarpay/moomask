@@ -8,6 +8,7 @@ MooMask is a browser extension wallet for Binance SmartChain.  For safety, alway
 * Export private key.
 * View BNB, BEP-20 and Peggy Token balances.
 * View wallet address with the QR code.
+* Multiple wallets.
 * View recent transactions.
 * Send & receive BNB, BEP-20 and Peggy Tokens.
 * Switch the network between Mainnet and Testnet.
