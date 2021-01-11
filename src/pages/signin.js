@@ -6,7 +6,7 @@ import {Button, Box, TextField, FormControl, FormHelperText} from '@material-ui/
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Header from '../components/header';
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { networkProvider, currentWallet } from '../store/atoms';
+import { networkProvider, currentWallet, allWallets } from '../store/atoms';
 import { decryptKeyStore } from '../utils/keystore';
 
 const useStyles = makeStyles((theme) => ({
@@ -41,6 +41,7 @@ export default function Signin() {
   const [helperText, setHelperText] = React.useState('');
 
   const [wallet, setWallet] = useRecoilState(currentWallet);
+  const [,setAllWallets] = useRecoilState(allWallets);
   const provider = useRecoilValue(networkProvider)
 
   const history = useHistory();
@@ -54,8 +55,13 @@ export default function Signin() {
 
     try {
       decryptKeyStore(provider, wallet.keystore, pass);
-      setWallet(wallet => {
-        return {...wallet, password: pass};
+      setAllWallets(wallets => {
+        const all = [];
+        for(let i = 0; i < wallets.length; i++) {
+          const wal = wallets[i];
+          all.push({...wal, password: pass});
+        }
+        return all;
       });
     } catch(e) {
       console.error(e);

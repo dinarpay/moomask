@@ -76,6 +76,19 @@ export const currentWallet = selector({
     return null;
   }
 });
+export const walletWithAddress = selectorFamily({
+  key: 'walletWithAddress',
+  default: null,
+  get: ({address}) => ({get}) => {
+    const all = get(allWallets);
+    for(let i = 0; i < all.length; i++) {
+      if(all[i].address === address) {
+        return all[i];
+      }
+    }
+    return null;
+  }
+})
 
 export const currentBalance = selectorFamily({
   key: 'currentBalance',

@@ -9,6 +9,7 @@ import AboutUs from './pages/about-us'
 import Send from './pages/send'
 import Receive from './pages/receive'
 import TransactionDetail from './pages/transaction-details';
+import WalletDetail from './pages/wallet-details';
 import ExportKey from './pages/export-key';
 
 import { useRecoilState } from 'recoil';
@@ -87,6 +88,8 @@ function App() {
                 <ExportKey />
               </Route>
               <Route path="/transaction/:hash" component={TransactionDetail}>
+              </Route>
+              <Route path="/wallet/:address/:index" component={WalletDetail}>
               </Route>
               <Route exact path="/">
                 { loggedIn ? <Home /> : <Signin />}

@@ -74,6 +74,10 @@ export default function Settings() {
     history.push(`/${link}`);
   }
 
+  const openWallet = (address, index) => {
+    history.push(`/wallet/${address}/${index}`);
+  }
+
   return (<>
     <Header loggedIn={true}>
       <BackButtonHeader title="Settings" />
@@ -84,16 +88,11 @@ export default function Settings() {
           <Typography variant="caption" >All Accounts</Typography>
           <List dense={false}>
             {allWal.map((wallet, index) => {
-              return <ListItem key={index} className={classes.addressLI}>
+              return <ListItem button key={index} className={classes.addressLI} onClick={() => openWallet(wallet.address, index)}>
                 <ListItemIcon className={classes.addressLICheck}>
                   {wallet.current && <Check color="primary" />}  
                 </ListItemIcon>
-                <ListItemText primary={compressAddress(wallet.address, 16)}></ListItemText>
-                <ListItemSecondaryAction>
-                  <Icon edge="end">
-                    <OpenInNew />
-                  </Icon>
-                </ListItemSecondaryAction>
+                <ListItemText primary={wallet.label ? wallet.label : `Account ${index}`} secondary={compressAddress(wallet.address, 16)}></ListItemText>
               </ListItem>
             })}
           </List>
