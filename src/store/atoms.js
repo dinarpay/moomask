@@ -8,7 +8,7 @@ import {
 import Networks from '../config/networks'
 import { precisionFormat } from '../utils/format-utils'
 import { getProvider, loadSingle } from '../utils/token-utils'
-import ALL_TOKENS, { BNB_CODE } from '../config/tokens'
+import { BNB_CODE } from '../config/tokens'
 
 const NetworkMap = {};
 Networks.forEach(item => {
@@ -76,6 +76,7 @@ export const currentWallet = selector({
     return null;
   }
 });
+
 export const walletWithAddress = selectorFamily({
   key: 'walletWithAddress',
   default: null,
@@ -92,7 +93,7 @@ export const walletWithAddress = selectorFamily({
 
 export const allTokens = atom({
   key: 'allTokens',
-  default: ALL_TOKENS,
+  default: [],
   persistence_UNSTABLE: {
     type: 'allTokens'
   }

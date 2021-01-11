@@ -42,8 +42,8 @@ export default function Signin() {
 
   const wallet = useRecoilValue(currentWallet);
   const [,setAllWallets] = useRecoilState(allWallets);
-  const provider = useRecoilValue(networkProvider)
-
+  const provider = useRecoilValue(networkProvider);
+  
   const history = useHistory();
 
   const handleSubmit = (event) => {

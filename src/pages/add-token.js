@@ -82,6 +82,8 @@ export default function AddCustomToken() {
       return [...tokens, tokenInfo];
     });
 
+    setOpenSuccess(true);
+
   }
   
   return (

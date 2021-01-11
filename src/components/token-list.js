@@ -36,7 +36,7 @@ export default function TokenList() {
     return (
       <ListItem style={style} key={index} disableGutters className="trans-list">
         <ListItemAvatar>
-          <Avatar alt={di.title} src={`/tokens/${di.icon}`} />
+          {di.icon && <Avatar alt={di.title} src={`/tokens/${di.icon}`} />}
         </ListItemAvatar>
         <ListItemText primary={`${precisionFormat(di.decimals)(di.balance)} ${di.code}`} secondary={di.title} />
       </ListItem>

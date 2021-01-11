@@ -14,7 +14,7 @@ import ExportKey from './pages/export-key';
 import AddCustomToken from './pages/add-token';
 
 import { useRecoilState } from 'recoil';
-import { currentWallet } from './store/atoms';
+import { allTokens, currentWallet } from './store/atoms';
 
 import {
   MemoryRouter as Router,
@@ -24,6 +24,7 @@ import {
 
 import { ThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import Settings from './pages/settings';
+import ALL_TOKENS from './config/tokens';
 
 const theme = createMuiTheme({
   typography: {
@@ -52,6 +53,8 @@ function App() {
   const [walletAtom] = useRecoilState(currentWallet);
   const [loggedIn, setLoggedIn] = React.useState(false);
 
+  const [currentTokens, setCurrentTokens] = useRecoilState(allTokens);
+
   React.useEffect(() => {
     if(walletAtom && walletAtom.address && walletAtom.password && walletAtom.keystore) {
       setLoggedIn(true);
@@ -59,6 +62,13 @@ function App() {
       setLoggedIn(false);
     }
   }, [walletAtom]);
+
+
+  React.useEffect(() => {
+    if(currentTokens.length === 0) {
+      setCurrentTokens(ALL_TOKENS);
+    }
+  }, [currentTokens]);
 
   return (
     <ThemeProvider theme={theme}>

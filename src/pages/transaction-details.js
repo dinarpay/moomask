@@ -90,7 +90,9 @@ function ActualDetails({hash, tokensMap, network}) {
   
   return (<>
     <div className={classes.toparea}>
-      <Avatar alt={tokenValue.title} className={classes.avtar} src={`/tokens/${tokenValue.icon}`} />
+      {tokenValue.icon && 
+        <Avatar alt={tokenValue.title} className={classes.avtar} src={`/tokens/${tokenValue.icon}`} />
+      }
       <div className={classes.amount}>
         <span>{precisionFormat(tokenValue.decimals)(di.value)} {tokenValue.code}</span>
         {success && <span className="success">
