@@ -98,10 +98,11 @@ export default function ImportWallet() {
         const account = web3.eth.accounts.privateKeyToAccount(key);
         const keystore = encryptKeyStore(web3, key, pass);
 
-        setWalletAtom((current) => {
-          const all = [...current];
+        setWalletAtom((item) => {
+          let all = [...item];
           for(let i = 0; i < all.length; i++) {
-            all[i].current = false;
+            let si = {...all[i], current: false};
+            all[i] = si;
           }
           const wal = {
             address: account.address,
@@ -114,6 +115,7 @@ export default function ImportWallet() {
         });
 
       } catch(error) {
+        console.error(error)
         setHelperKeyText(error.message);
         setKeyError(true)
       }

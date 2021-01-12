@@ -1,8 +1,8 @@
 body {
   background:#f5f5f5;
-  width: 400px;
-  min-height: 640px;
-  overflow-y: hidden;
+  width: 370px;
+  height: 600px;
+  overflow: hidden;
 }
 img {
   max-width: 100%;
@@ -28,4 +28,13 @@ img {
   font-weight: normal;
   margin: 0;
   margin-bottom: 1rem;
+}
+
+.nothing-msg,
+.loading {
+  font-size:.9rem;
+  margin-top:16px;
+  display: block;
+  text-align: center;
+  color:#666;
 }

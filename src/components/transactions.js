@@ -122,9 +122,13 @@ export function AllTransactions() {
   }
   
   return (
-    <FixedSizeList height={600} width={'100%'} itemSize={70} itemCount={transactions.length}>
-      {renderRow}
-    </FixedSizeList>
+    <>
+      {(transactions && transactions.length) ?
+      <FixedSizeList height={Math.min((window.innerHeight - 100), 70 * transactions.length)} width={'100%'} itemSize={70} itemCount={transactions.length}>
+        {renderRow}
+      </FixedSizeList>
+      : <span className="nothing-msg">No transactions found</span> }
+    </>
   )
 }
 

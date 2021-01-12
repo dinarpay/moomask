@@ -19,7 +19,7 @@ function Alert(props) {
 
 const useStyles = makeStyles((theme) => ({
   freeToken: {
-    marginBottom: theme.spacing(2),
+    margin: theme.spacing(2),
     textAlign: 'center'
   },
   root: {
