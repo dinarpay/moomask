@@ -19,7 +19,8 @@ import { allTokens, currentWallet } from './store/atoms';
 import {
   MemoryRouter as Router,
   Switch,
-  Route
+  Route,
+  Redirect
 } from "react-router-dom";
 
 import { ThemeProvider, createMuiTheme } from '@material-ui/core/styles';
@@ -50,19 +51,7 @@ const theme = createMuiTheme({
 
 function App() {
 
-  const [walletAtom] = useRecoilState(currentWallet);
-  const [loggedIn, setLoggedIn] = React.useState(false);
-
   const [currentTokens, setCurrentTokens] = useRecoilState(allTokens);
-
-  React.useEffect(() => {
-    if(walletAtom && walletAtom.address && walletAtom.password && walletAtom.keystore) {
-      setLoggedIn(true);
-    }else {
-      setLoggedIn(false);
-    }
-  }, [walletAtom]);
-
 
   React.useEffect(() => {
     if(currentTokens.length === 0) {
@@ -72,45 +61,106 @@ function App() {
 
   return (
     <ThemeProvider theme={theme}>
-        <Router>
+      <ProvideAuth>
+          <Router>
             <Switch>
+              <PrivateRoute path="/about-us">
+                <AboutUs />
+              </PrivateRoute>
+              <PrivateRoute path="/send">
+                <Send />
+              </PrivateRoute>
+              <PrivateRoute path="/settings">
+                <Settings />
+              </PrivateRoute>
+              <Route path="/receive">
+                <Receive />
+              </Route>
+              <PrivateRoute path="/export-key">
+                <ExportKey />
+              </PrivateRoute>
+              <PrivateRoute path="/add-token">
+                <AddCustomToken />
+              </PrivateRoute>
+              <PrivateRoute path="/home">
+                <Home />
+              </PrivateRoute>
+              <Route path="/transaction/:hash" component={TransactionDetail}>
+              </Route>
+              <PrivateRoute path="/wallet/:address/:index" component={WalletDetail}>
+              </PrivateRoute>
               <Route path="/create-wallet">
                 <CreateWallet />
               </Route>
               <Route path="/import-wallet">
-              { loggedIn ? <Home /> : <ImportWallet /> }
+                <ImportWallet />
               </Route>
               <Route path="/signin">
                 <Signin />
               </Route>
-              <Route path="/about-us">
-                <AboutUs />
-              </Route>
-              <Route path="/send">
-                <Send />
-              </Route>
-              <Route path="/settings">
-                <Settings />
-              </Route>
-              <Route path="/receive">
-                <Receive />
-              </Route>
-              <Route path="/export-key">
-                <ExportKey />
-              </Route>
-              <Route path="/add-token">
-                <AddCustomToken />
-              </Route>
-              <Route path="/transaction/:hash" component={TransactionDetail}>
-              </Route>
-              <Route path="/wallet/:address/:index" component={WalletDetail}>
-              </Route>
               <Route exact path="/">
-                { loggedIn ? <Home /> : <Signin />}
+                <Redirect to="/home" />
               </Route>
             </Switch>
-        </Router>
+          </Router>
+        </ProvideAuth>
     </ThemeProvider>
+  );
+}
+
+/** For more details on
+ * `AuthContext`, `ProvideAuth`, `useAuth` and `useProvideAuth`
+ * refer to: https://usehooks.com/useAuth/
+ */
+const AuthContext = React.createContext();
+
+function ProvideAuth({ children }) {
+  const auth = useProvideAuth();
+  return (
+    <AuthContext.Provider value={auth}>
+      {children}
+    </AuthContext.Provider>
+  );
+}
+
+function useProvideAuth() {
+
+  const [walletAtom] = useRecoilState(currentWallet);
+  const [loggedIn, setLoggedIn] = React.useState(false);
+
+  React.useEffect(() => {
+    if(walletAtom && walletAtom.address && walletAtom.password && walletAtom.keystore) {
+      setLoggedIn(true);
+    } else {
+      setLoggedIn(false);
+    }
+  }, [walletAtom]);
+
+  return {
+    loggedIn
+  };
+}
+
+// A wrapper for <Route> that redirects to the login
+// screen if you're not yet authenticated.
+function PrivateRoute({ children, ...rest }) {
+  let auth = React.useContext(AuthContext);
+  return (
+    <Route
+      {...rest}
+      render={({ location }) =>
+        auth.loggedIn ? (
+          children
+        ) : (
+          <Redirect
+            to={{
+              pathname: "/signin",
+              state: { from: location }
+            }}
+          />
+        )
+      }
+    />
   );
 }
 

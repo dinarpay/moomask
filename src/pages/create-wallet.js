@@ -14,7 +14,7 @@ import { encryptKeyStore } from '../utils/keystore';
 
 import { useRecoilState, useRecoilValue } from 'recoil';
 
-import { allWallets, networkProvider } from '../store/atoms';
+import { allWallets, currentWallet, networkProvider } from '../store/atoms';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -86,6 +86,7 @@ export default function CreateWallet() {
   const [, setWalletAtom] = useRecoilState(allWallets)
 
   const provider = useRecoilValue(networkProvider)
+  const cWallet = useRecoilValue(currentWallet)
 
   const [pass, setPass] = React.useState('');
   const [passwordError, setPasswordError] = React.useState(false);
@@ -94,6 +95,12 @@ export default function CreateWallet() {
   const [wallet, setWallet] = React.useState(null)
 
   const history = useHistory();
+
+  React.useEffect(() => {
+    if(cWallet && cWallet.password) {
+      history.push('/home');
+    }
+  }, [cWallet]);
 
   const handleSubmit = (event) => {
     event.preventDefault();

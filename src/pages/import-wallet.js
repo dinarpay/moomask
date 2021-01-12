@@ -53,6 +53,7 @@ export default function ImportWallet() {
   const [, setWalletAtom] = useRecoilState(allWallets)
 
   const web3 = useRecoilValue(networkProvider)
+  const cWallet = useRecoilValue(currentWallet)
 
   const [key, setKey] = React.useState('');
 
@@ -64,6 +65,12 @@ export default function ImportWallet() {
   const [helperKeyText, setHelperKeyText] = React.useState('');
 
   const history = useHistory();
+
+  React.useEffect(() => {
+    if(cWallet && cWallet.password) {
+      history.push('/home');
+    }
+  }, [cWallet]);
 
   const handleSubmit = (event) => {
     event.preventDefault();

@@ -46,6 +46,12 @@ export default function Signin() {
   
   const history = useHistory();
 
+  React.useEffect(() => {
+    if(wallet && wallet.password) {
+      history.push('/home');
+    }
+  }, [wallet]);
+
   const handleSubmit = (event) => {
     event.preventDefault();
     if(!wallet || !wallet.keystore) {
