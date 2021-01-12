@@ -180,6 +180,10 @@ export const networkTransactions = selectorFamily({
         if(mvalue.status === '1' && pvalue.status === '1') {
           const mr = mergeResults(mvalue.result, pvalue.result);
           return mr;
+        } else if(mvalue.status === '1' && pvalue.status === '0') {
+          return mvalue.result.reverse();
+        } else if(mvalue.status === '0' && pvalue.status === '1') {
+          return pvalue.result.reverse();
         }
       } else if(main.status === "fulfilled") {
         const {value: mvalue} = main;

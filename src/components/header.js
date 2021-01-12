@@ -34,7 +34,7 @@ export default function Header({loggedIn, children}) {
   return (
     <AppBar className={classes.root} color="default" position="static" elevation={eleVal}>
       <Toolbar className={classes.root}>
-        { loggedIn && <Link href="/" to="/" className={classes.logo}>
+        { loggedIn && <Link href="/home" to="/home" className={classes.logo}>
           <img src="images/moopay-small.png" alt="MooMask" />
           <span>MOOMASK</span>
         </Link> }

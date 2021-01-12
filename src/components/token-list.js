@@ -21,6 +21,10 @@ const useStyles = makeStyles((theme) => ({
   freeToken: {
     marginBottom: theme.spacing(2),
     textAlign: 'center'
+  },
+  root: {
+    paddingLeft:0,
+    paddingRight:0
   }
 }));
 
@@ -34,7 +38,7 @@ export default function TokenList() {
     const { index, style } = props;
     const di = list[index];
     return (
-      <ListItem style={style} key={index} disableGutters className="trans-list">
+      <ListItem style={style} key={index} className="trans-list">
         <ListItemAvatar>
           {di.icon && <Avatar alt={di.title} src={`/tokens/${di.icon}`} />}
         </ListItemAvatar>
@@ -50,7 +54,7 @@ export default function TokenList() {
           <a href="https://testnet.binance.org/faucet-smart" target="_blank" rel="noreferrer">Click here</a>
         </strong> to get some tokens
       </Alert>}
-      <FixedSizeList height={400} width={'100%'} itemSize={70} itemCount={list.length}>
+      <FixedSizeList className={classes.root} height={Math.min((window.innerHeight - 100), 70 * list.length)} width={'100%'} itemSize={70} itemCount={list.length}>
         {renderRow}
       </FixedSizeList>
   </>

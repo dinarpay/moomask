@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { currentNetwork, currentWallet, networkTransactions, allTokens } from '../store/atoms'
-import { useRecoilValue, useRecoilValueLoadable } from 'recoil';
+import { useRecoilValue } from 'recoil';
 
 import {ButtonBase} from '@material-ui/core';
 
@@ -73,7 +73,7 @@ export function AllTransactions() {
 
   const wallet = useRecoilValue(currentWallet);
   const network = useRecoilValue(currentNetwork);
-  const transactions = useRecoilValueLoadable(networkTransactions(0));
+  const transactions = useRecoilValue(networkTransactions(0));
 
   const allTokensData = useRecoilValue(allTokens);
 

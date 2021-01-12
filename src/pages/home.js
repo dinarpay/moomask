@@ -3,7 +3,7 @@ import React from 'react';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Button from '@material-ui/core/Button';
-import { useTheme } from '@material-ui/core';
+import { Container, useTheme } from '@material-ui/core';
 import Box from '@material-ui/core/Box';
 import { makeStyles } from '@material-ui/core/styles';
 import Header from '../components/header';
@@ -53,6 +53,15 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
     backgroundColor: theme.palette.background.paper,
   },
+  cont: {
+    paddingLeft:0,
+    paddingRight:0
+  },
+  list: {
+    '& .MuiBox-root': {
+      padding:0
+    }
+  },
   freeToken: {
     marginBottom: theme.spacing(2),
     textAlign: 'center'
@@ -80,34 +89,36 @@ export default function Home() {
           <Tab label="Transactions" {...a11yProps(2)} />
         </Tabs>
       </Header>
-      <TabPanel value={value} index={0}>
-        <React.Suspense fallback={<div>Loading...</div>}>
-          {network === 2 && <Alert severity="info" icon={false} className={classes.freeToken}>
-            <strong>
-            <a href="https://testnet.binance.org/faucet-smart" target="_blank" rel="noreferrer">Click here</a>
-            </strong> to get some tokens</Alert>}
-            <Balance >
-            <CardActions>
-              <Button size="small" onClick={() => history.push('/send')} >
-                Send
-              </Button>
-              <Button size="small" onClick={() => history.push('/receive')}>
-                Receive
-              </Button>
-            </CardActions>
-          </Balance>
-        </React.Suspense>
-      </TabPanel>
-      <TabPanel value={value} index={1}>
-        <React.Suspense fallback={<div>Loading...</div>}>
-          <TokenList />
-        </React.Suspense>
-      </TabPanel>
-      <TabPanel value={value} index={2}>
-        <React.Suspense fallback={<div>Loading...</div>}>
-          <Transactions />
-        </React.Suspense>
-      </TabPanel>
+      <Container className={classes.cont}>
+        <TabPanel value={value} index={0}>
+          <React.Suspense fallback={<div>Loading...</div>}>
+            {network === 2 && <Alert severity="info" icon={false} className={classes.freeToken}>
+              <strong>
+              <a href="https://testnet.binance.org/faucet-smart" target="_blank" rel="noreferrer">Click here</a>
+              </strong> to get some tokens</Alert>}
+              <Balance >
+              <CardActions>
+                <Button size="small" onClick={() => history.push('/send')} >
+                  Send
+                </Button>
+                <Button size="small" onClick={() => history.push('/receive')}>
+                  Receive
+                </Button>
+              </CardActions>
+            </Balance>
+          </React.Suspense>
+        </TabPanel>
+        <TabPanel value={value} index={1} className={classes.list}>
+          <React.Suspense fallback={<div>Loading...</div>}>
+            <TokenList  />
+          </React.Suspense>
+        </TabPanel>
+        <TabPanel value={value} index={2} className={classes.list}>
+          <React.Suspense fallback={<div>Loading...</div>}>
+            <Transactions />
+          </React.Suspense>
+        </TabPanel>
+      </Container>
     </div>
   )
 }
